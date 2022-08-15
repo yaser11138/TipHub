@@ -1,8 +1,14 @@
 from django.shortcuts import render,redirect
+from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import logout as django_logout, login as django_login
-from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.views import PasswordResetConfirmView
 from .forms import CustomUserCreationForm
+
+
+class ResetPasswordConfirmView(PasswordResetConfirmView):
+    template_name = "reset-password.html"
+    success_url = reverse_lazy("login")
 
 
 def register(request):
