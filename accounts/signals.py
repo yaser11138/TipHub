@@ -8,6 +8,9 @@ from django.contrib.auth import get_user_model
 from allauth.exceptions import ImmediateHttpResponse
 from django.shortcuts import redirect
 from django.conf import settings
+from django.contrib import messages
+from allauth.account.forms import SetPasswordForm
+
 
 User = get_user_model()
 
@@ -27,7 +30,8 @@ def populate_profile(sender,request,user,sociallogin,**kwargs):
 @receiver(pre_social_login)
 def link_to_local_user(sender, request, sociallogin, **kwargs):
     email_address = sociallogin.account.extra_data['email']
-    users = User.objects.filter(email=email_address)
-    if users:
-        perform_login(request, users[0], email_verification="optinal")
-        raise ImmediateHttpResponse(redirect(settings.LOGIN_REDIRECT_URL))    
+    user = User.objects.filter(email=email_address)
+    if user:
+        if not user[0].socialaccount_set.filter(provider=sociallogin.account.provider):
+            messages.warning(request, 'اکانت با ایمیل وجود دارد اما با استفاده از این طریق نمی توانید به ان وارد شوید')
+            raise ImmediateHttpResponse(redirect("login"))    

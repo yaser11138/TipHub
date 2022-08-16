@@ -5,7 +5,12 @@ from django.contrib.auth import logout as django_logout, login as django_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetConfirmView
 from .forms import CustomUserCreationForm
+from allauth.account.views import PasswordSetView
 
+
+class SetPasswordView(PasswordSetView):
+    template_name = "set-password.html"
+    success_url = reverse_lazy("homepage")
 
 class ResetPasswordConfirmView(PasswordResetConfirmView):
     template_name = "reset-password.html"
