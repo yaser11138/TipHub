@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import logout as django_logout, login as django_login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetConfirmView
 from .forms import CustomUserCreationForm
 
@@ -35,8 +36,9 @@ def login(request):
     else:
         form = AuthenticationForm()
         return render(request, "login.html", context={"form": form})
+
     
-    
+@login_required(redirect_field_name=reverse_lazy("login"))    
 def logout(request):
     django_logout(request)
     return redirect("homepage")

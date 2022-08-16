@@ -33,13 +33,15 @@ class CustomUserManager(UserManager):
         return self._create_user(email, password, **extra_fields)
 
 
+def profile_picture_path(instance, filename):
+        return f"user_{instance.id}/{filename}"
+
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(verbose_name=_("Email Address"),unique=True)
-    profile_picture = models.ImageField()
-    
+    profile_picture = models.ImageField(upload_to=profile_picture_path)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-    
     objects = CustomUserManager()
+    
     

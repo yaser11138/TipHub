@@ -1,0 +1,19 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: [127.0.0.1:8000] Please Confirm Your E-mail Address
+From: webmaster@localhost
+To: ccc@gmail.com
+Date: Mon, 15 Aug 2022 09:16:52 -0000
+Message-ID: 
+ <166055501291.4948.9176182369842735484@DESKTOP-MVJQPJ9.domain.name>
+
+Hello from 127.0.0.1:8000!
+
+You're receiving this e-mail because user ccc@gmail.com has given your e-mail address to register an account on 127.0.0.1:8000.
+
+To confirm this is correct, go to http://localhost:8000/accounts/confirm-email/Ng:1oNWDM:v2zKYig8QTnAXK-ohGOBn6S37LXkvk3OPB2MAU1KaSM/
+
+سپاس‌گزاریم برای استفاده از 127.0.0.1:8000.
+‏127.0.0.1:8000
+-------------------------------------------------------------------------------

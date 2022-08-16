@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django.contrib.sites',
-    'account',
+    'accounts.apps.AccountsConfig',
     'index',
     
     # allauth apps
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
 ]
 
 MIDDLEWARE = [
@@ -115,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "fa"
+LANGUAGE_CODE = "en"
 
 TIME_ZONE = "UTC"
 
@@ -137,7 +138,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = 'account.CustomUser'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
@@ -150,12 +151,24 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
-        }
+        },
+    },
+    'github': {
     }
 }
 
-SITE_ID = 1
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+SOCIALACCOUNT_LOGIN_ON_GET = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+SITE_ID = 2
 LOGIN_REDIRECT_URL = '/'
+
+MEDIA_ROOT =  BASE_DIR / 'media'
+MEDIA_URL = '/media/'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
