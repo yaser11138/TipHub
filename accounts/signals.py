@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from django.conf import settings
 from django.contrib import messages
 from allauth.account.forms import SetPasswordForm
+import uuid
 
 
 User = get_user_model()

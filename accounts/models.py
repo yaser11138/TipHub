@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
 
 class CustomUserManager(UserManager):
     """Define a model manager for User model with no username field."""
@@ -37,11 +38,11 @@ def profile_picture_path(instance, filename):
         return f"user_{instance.id}/{filename}"
 
 class CustomUser(AbstractUser):
-    username = None
+    username = models.CharField(_("username"),max_length=150,)
     email = models.EmailField(verbose_name=_("Email Address"),unique=True)
+    phone_number = PhoneNumberField(blank=True)
     profile_picture = models.ImageField(upload_to=profile_picture_path)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
-    
     

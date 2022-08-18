@@ -1,4 +1,4 @@
-from dataclasses import field
+from dataclasses import field, fields
 import email
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -11,3 +11,12 @@ class CustomUserCreationForm(UserCreationForm):
         model = get_user_model()
         fields = ("email",)
 
+class CustomUserUpdate(forms.ModelForm):
+    
+    email = forms.EmailField(disabled=True)
+    
+    class Meta:
+        model = get_user_model()
+        fields = ("username", "first_name", "last_name", "email", "profile_picture")
+        
+               
