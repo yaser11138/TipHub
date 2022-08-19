@@ -1,55 +1,79 @@
-{% extends 'index.html' %}
-{% block main %}
-{% load static %}
-    <main>
-        <section class="py-5">
-            <div class="container">
-               <div class="row d-flex justify-content-center">
-                <div class="col-sm-9 col-md-11 col-lg-10">
-                    <div class="user-panel custom-bg">
-                        <div class="user-panel-box">
-                            <div class="user-panel-profile">
-                                <img src={{ form.profile_picture.value.url}} alt="">
-                            </div>
-                            <div class="change-profile-btn">
-                                <input type="file" name="profile_picture" accept="image/*" required id="id_profile_picture">
-                            </div>
-                            <!-- item -->
-                            <div class="user-panel-field">
-                                <i class="fa fa-user"></i>
-                                <input class="email-input" type="text" value={{ form.first_name.value }} placeholder="نام"
-                                    required="">
-                            </div>
-                            <!-- item -->
-                            <div class="user-panel-field">
-                                <i class="fa fa-user"></i>
-                                <input class="email-input" type="text" value={{ form.last_name.value }} placeholder="نام خانوادگی"
-                                    required="">
-                            </div>
-                            <!-- item -->
-                            <div class="user-panel-field">
-                                <i class="fa fa-envelope"></i>
-                                <input class="email-input" type="email" value={{ form.email.value }} placeholder="پست الکترونیک" dir="ltr" maxlength="50"
-                                    required="">
-                           </div>
-                            <!-- item -->
-                            <div class="user-panel-field">
-                                <i class="fa fa-phone"></i>
-                                <input class="email-input" type="tel"  placeholder="شماره تلفن">
-                            </div>
-                            <!-- item -->
-                            <div class="user-panel-field">
-                                <i class="fa fa-user-circle"></i>
-                                <input class="" type="text" placeholder="نام کاربری" vlaue={{form.username.vlaue}} required="">
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-center mt-3 ">
-                            <button type="submit" class="btn custom-btn w-50">اعمال تغییرات</button>
-                        </div>
-                    </div>
+{% extends 'index.html' %} 
+{% block main %} 
+{% load static %} 
+{% block static  %} 
+<style>
+    input[type=file] {
+      display: none;
+    }
+  </style> 
+  {% endblock %} 
+  <main>
+    <section class="py-5">
+      <div class="container">
+        <div class="row d-flex justify-content-center">
+          <div class="col-sm-9 col-md-11 col-lg-10">
+            <form method="post">
+              {% csrf_token %}
+            <div class="user-panel custom-bg">
+              <div class="user-panel-box">
+                  <div class="user-panel-profile">
+                      <img src="{{ form.profile_picture.value.url }}" alt="">
+                  </div>
+                  <div class="change-profile-btn">
+                      <button class="btn custom-btn">
+                        <label for='myfile'>تغییر عکس پروفایل <input type="file" accept="image/*" id="myfile" /></label>
+                      </button>
+                      {% if form.profile_picture.errors %}
+                      <p>{{ form.profile_picture.errors|striptags}}</p>
+                      {% endif %} 
+                  </div> 
+                  <!-- item -->
+                  <div class="user-panel-field">
+                      <i class="fa fa-user"></i>
+                      <input class="email-input" type="text" name="first_name" value="{{ form.first_name.value }}" placeholder="نام "
+                          >  
+                  </div>
+                  <!-- item -->
+                  <div class="user-panel-field">
+                    <i class="fa fa-user"></i>
+                    <input class="email-input" type="text" name="last_name" value="{{ form.last_name.value }}" placeholder="نام خانوادگی"
+                        >    
                 </div>
-               </div>
+                  <!-- item -->
+                  <div class="user-panel-field">
+                      <i class="fa fa-envelope"></i>
+                      <input class="email-input" type="email" name="email" value="{{ form.email.value }}" placeholder="پست الکترونیک" dir="ltr" maxlength="50"
+                          disabled>   
+                 </div>
+                 
+                  <!-- item -->
+                  <div class="user-panel-field">
+                      <i class="fa fa-phone"></i>
+                      <input class="email-input" type="tel" name="phone_number" value="{{ form.phone_number.value }}" placeholder="شماره تلفن">
+                  </div>
+                
+                  <!-- item -->
+                  <div class="user-panel-field">
+                      <i class="fa fa-user-circle"></i>
+                      <input class="" type="text" name="username" value="{{ form.username.value }}" placeholder="نام کاربری" >    
+                  </div>
+                  
+              </div>
+              {% if form.errors %}
+                  {% for error in form.errors.values  %}
+                          <p>{{ error|striptags}}</p>
+                          {% endfor %}        
+              {% endif %} 
+              <div class="d-flex justify-content-center mt-3 ">
+                  <button type="submit" class="btn custom-btn w-50">اعمال تغییرات</button>
+              </div>
+            
             </div>
-        </section>
-    </main>
-{% endblock %}
+          </form> 
+          </div>
+        </div>
+      </div>
+    </section>
+  </main> 
+  {% endblock %}

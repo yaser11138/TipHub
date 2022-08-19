@@ -16,17 +16,19 @@ import uuid
 User = get_user_model()
 
 @receiver(user_signed_up)
-def populate_profile(sender,request,user,sociallogin,**kwargs):
-    if sociallogin.account.provider == 'google':
-        user_picture_url = user.socialaccount_set.filter(provider='google')[0].extra_data["picture"]
-        result = urllib.request.urlretrieve(user_picture_url)
-        user.profile_picture.save(f"profile_user_{user.id}.png", File(open(result[0], 'rb')))
-        user.save()
-    elif sociallogin.account.provider == 'github':
-        user_picture_url = user.socialaccount_set.filter(provider='github')[0].extra_data["avatar_url"]
-        result = urllib.request.urlretrieve(user_picture_url)
-        user.profile_picture.save(f"profile_user_{user.id}.png", File(open(result[0], 'rb')))
-        user.save()    
+def populate_profile(sender,request,user,**kwargs):
+    if kwargs.get("sociallogin"):
+        social_login = kwargs.get("sociallogin")
+        if social_login.account.provider == 'google':
+            user_picture_url = user.socialaccount_set.filter(provider='google')[0].extra_data["picture"]
+            result = urllib.request.urlretrieve(user_picture_url)
+            user.profile_picture.save(f"profile_user_{user.id}.png", File(open(result[0], 'rb')))
+            user.save()
+        elif social_login.account.provider == 'github':
+            user_picture_url = user.socialaccount_set.filter(provider='github')[0].extra_data["avatar_url"]
+            result = urllib.request.urlretrieve(user_picture_url)
+            user.profile_picture.save(f"profile_user_{user.id}.png", File(open(result[0], 'rb')))
+            user.save()    
         
 @receiver(pre_social_login)
 def link_to_local_user(sender, request, sociallogin, **kwargs):

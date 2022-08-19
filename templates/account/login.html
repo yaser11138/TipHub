@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
-{% block main %}
 {% load socialaccount %}
+{% block main %}
 <main>
     <section class="py-5">
             <div class="container">
@@ -14,11 +14,11 @@
                                 {% csrf_token %}
                                 <div  class="field" >
                                         <i class="fa fa-envelope"></i>
-                                        <input class="email-input" name="username" type="tetx" placeholder="پست الکترونیک" dir="ltr" maxlength="50"  >
+                                        <input class="email-input" name="login" type="tetx" placeholder="پست الکترونیک" dir="ltr" maxlength="50"  >
                     
                                 </div>
-                                {% if form.username.errors %}
-                                    <p>{{ form.username.errors|striptags}}</p>
+                                {% if form.login.errors %}
+                                    <p>{{ form.login.errors|striptags}}</p>
                                  {% endif %}    
                                 <div class="field">
                                         <i class="fa fa-lock"></i>
@@ -27,12 +27,10 @@
                                 {% if form.password.errors %}
                                     <p>{{ form.password.errors|striptags}}</p>
                                  {% endif %}
-                                {% if form.errors %}
-                                <br>
-                                    {% for error in form.errors.values  %}
-                                        <p>{{ error|striptags }}</p>
-                                    {% endfor %}
-                                {% endif %}
+                                 
+                                 {% if form.non_field_errors %}
+                                    <p>{{ form.non_field_errors|striptags}}</p>
+                                 {% endif %}
 
                                 <div class="mr-1 d-flex justify-content-between">
                                         <div>

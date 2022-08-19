@@ -52,13 +52,11 @@
                         <div class="notification-box dropdown">
                             <a href="" class="btn login-btn" type="button" id="dropdownMenuButton"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {% if request.user.profile_picture  %}
                                 <img src={{request.user.profile_picture.url}} alt="">
-                                {% endif %}
                             </a>
                             <div class="dropdown-menu account-menu-items custom-bg"
                                 aria-labelledby="dropdownMenuButton">
-                                <a class="" href={% url 'user-panel' request.user.id %}> پروفایل</a>
+                                <a class="" href={% url 'user-panel' %}> پروفایل</a>
                                 <a class="" href="#"> مورد علاقه ها</a>
                                 <a class="" href={% url 'logout' %}> خروج</a>
                             </div>
@@ -76,7 +74,7 @@
                         </a>
                         <div class="dropdown-menu account-menu-items custom-bg"
                             aria-labelledby="dropdownMenuButton">
-                            <a class="" href={% url 'login' %}> <i class=" fa fa-account"></i>
+                            <a class="" href={% url 'account_login' %}> <i class=" fa fa-account"></i>
                                 ورود</a>
                             <a class="" href={% url 'register' %}> ثبت نام</a>
                             </div>
@@ -177,11 +175,11 @@
                         <div class="notification-box dropdown">
                             <a href="" class="btn login-btn" type="button" id="dropdownMenuButton"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src={% static 'assets/image/sutdent-prof.png' %} alt="">
+                                <img src={{request.user.profile_picture.url}} alt="">
                             </a>
                             <div class="dropdown-menu account-menu-items custom-bg"
                                 aria-labelledby="dropdownMenuButton">
-                                <a class="" href="user-panel.html"> پروفایل</a>
+                                <a class="" href={% url 'user-panel' %}> پروفایل</a>
                                 <a class="" href="#"> مورد علاقه ها</a>
                                 <a class="" href="#"> خروج</a>
                                 <a class="" href="#"></a>
@@ -206,7 +204,7 @@
                         </a>
                         <div class="dropdown-menu account-menu-items custom-bg"
                             aria-labelledby="dropdownMenuButton">
-                            <a class="" href={% url 'login' %}> <i class=" fa fa-account"></i>
+                            <a class="" href={% url 'account_login' %}> <i class=" fa fa-account"></i>
                                 ورود</a>
                             <a class="" href={% url 'register' %}> ثبت نام</a>
                         </div>
