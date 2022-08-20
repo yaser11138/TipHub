@@ -1,19 +1,15 @@
 {% extends 'index.html' %} 
 {% block main %} 
-{% load static %} 
+{% load static %}
+
 {% block static  %} 
-<style>
-    input[type=file] {
-      display: none;
-    }
-  </style> 
   {% endblock %} 
   <main>
     <section class="py-5">
       <div class="container">
         <div class="row d-flex justify-content-center">
           <div class="col-sm-9 col-md-11 col-lg-10">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
               {% csrf_token %}
             <div class="user-panel custom-bg">
               <div class="user-panel-box">
@@ -22,7 +18,7 @@
                   </div>
                   <div class="change-profile-btn">
                       <button class="btn custom-btn">
-                        <label for='myfile'>تغییر عکس پروفایل <input type="file" accept="image/*" id="myfile" /></label>
+                        <label style="cursor: pointer;" for='id_profile_picture'>تغییر عکس پروفایل <input type="file" style="opacity:0;" name="profile_picture" accept="image/*" id="id_profile_picture"></label>
                       </button>
                       {% if form.profile_picture.errors %}
                       <p>{{ form.profile_picture.errors|striptags}}</p>

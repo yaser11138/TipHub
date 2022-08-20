@@ -1,5 +1,3 @@
-from dataclasses import field, fields
-import email
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from phonenumber_field.formfields import PhoneNumberField

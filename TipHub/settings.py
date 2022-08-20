@@ -159,14 +159,16 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 SOCIALACCOUNT_LOGIN_ON_GET = True
+ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory' 
 SITE_ID = 2
-LOGIN_REDIRECT_URL = reverse_lazy("password-set")
+LOGIN_REDIRECT_URL = reverse_lazy("homepage")
+ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy("password-set") 
 MEDIA_ROOT =  BASE_DIR / 'media'
 MEDIA_URL = '/media/'
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'

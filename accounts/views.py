@@ -1,38 +1,34 @@
-import imp
-from operator import ge
-from urllib import request
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
-from django.contrib.auth import logout as django_logout, login as django_login
+from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import PasswordResetConfirmView
-from allauth.account.views import PasswordSetView
-from django.urls import reverse_lazy
-from .forms import CustomUserCreationForm, CustomUserUpdate
+from allauth.account.views import PasswordSetView,sensitive_post_parameters_m
+from allauth.account.views import LoginView, SignupView
+from django.urls import reverse_lazy, reverse
+from .forms import CustomUserUpdate
 User = get_user_model()
-from allauth.account.views import LoginView
+
 
 class SetPasswordView(PasswordSetView):
     template_name = "set-password.html"
     success_url = reverse_lazy("homepage")
+    
+    @sensitive_post_parameters_m
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.has_usable_password():
+            return HttpResponseRedirect(reverse("homepage"))
+        return super(PasswordSetView, self).dispatch(request, *args, **kwargs)
 
 class ResetPasswordConfirmView(PasswordResetConfirmView):
     template_name = "reset-password.html"
     success_url = reverse_lazy("login")
 
 
-def register(request):
-    if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("homepage")
-        else:
-            return render(request, "register.html", context={"form":form})
-    else:
-        form = CustomUserCreationForm()
-        return render(request, "register.html", context={"form": form})
+class CustomSignupView(SignupView):
+    success_url = reverse_lazy("login")
+    template_name = "account/signup.html"
     
         
 class CustomLoginView(LoginView):
@@ -48,10 +44,11 @@ def logout(request):
 def edit_user_panel(request, user_id):
     user = get_object_or_404(klass=User, id=user_id) 
     if request.method == "POST":
-        form = CustomUserUpdate(data=request.POST, instance=user)
+        form = CustomUserUpdate(data=request.POST,files=request.FILES, instance=user)
+        print(request.FILES)
         if form.is_valid():
-            x=form.save()
-            print(x.username)
+            print(form.cleaned_data)
+            form.save()
             return render(request, "edit-user-panel.html", context={"form": form})
         else:
             return render(request, "edit-user-panel.html", context={"form": form})  

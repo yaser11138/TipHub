@@ -1,12 +1,10 @@
-from tempfile import template
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
 
 
 urlpatterns = [
-    
-    path("register/", views.register, name="register"),
+    path("signup/", views.CustomSignupView.as_view(), name="register"),
     path("login/", views.CustomLoginView.as_view(), name="login"),
     path("logout/", views.logout, name="logout"),
     path("user-panel/<int:user_id>/edit", views.edit_user_panel, name="edit-user-panel"),
