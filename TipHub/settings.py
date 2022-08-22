@@ -14,6 +14,7 @@ from pathlib import Path
 from decouple import config
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+import locale
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,10 +41,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django_jalali',
     'django.contrib.sites',
     'accounts.apps.AccountsConfig',
-    'index',
     'phonenumber_field',
+    'index',
+    'blog_post',
     # allauth apps
     'allauth',
     'allauth.account',
@@ -67,8 +70,7 @@ ROOT_URLCONF = "TipHub.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates']
-        ,
+        "DIRS": [BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -117,9 +119,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "fa"
+LANGUAGE_CODE = 'fa-ir'
+locale.setlocale(locale.LC_ALL, 'Persian_Iran')
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Tehran"
 
 USE_I18N = True
 
@@ -166,16 +169,18 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory' 
 SITE_ID = 2
 LOGIN_REDIRECT_URL = reverse_lazy("homepage")
-MEDIA_ROOT =  BASE_DIR / 'media'
-MEDIA_URL = '/media/'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
+# media
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
 # phone number
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 PHONENUMBER_DEFAULT_REGION = "IR"
-PHONENUMBER_DEFAULT_FORMAT ="NATIONAL"
+PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
 
-#email
+

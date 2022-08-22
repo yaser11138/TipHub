@@ -36,7 +36,8 @@ class CustomUserManager(UserManager):
 
 
 def profile_picture_path(instance, filename):
-        return f"user_{instance.id}/{filename}"
+    return f"user_{instance.id}/{filename}"
+
 
 class CustomUser(AbstractUser):
     username = models.CharField(_("username"),max_length=150,)

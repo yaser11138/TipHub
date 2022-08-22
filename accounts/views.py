@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
@@ -11,7 +10,7 @@ User = get_user_model()
 
 
 class ResetPasswordConfirmView(PasswordResetConfirmView):
-    template_name = "reset-password.html"
+    template_name = "account/reset-password.html"
     success_url = reverse_lazy("login")
 
 
@@ -30,23 +29,23 @@ def logout(request):
 
 
 @login_required(login_url=reverse_lazy("login"))      
-def edit_user_panel(request, user_id):
-    user = get_object_or_404(klass=User, id=user_id) 
+def edit_user_panel(request):
+    user = get_object_or_404(klass=User, id=request.user.id) 
     if request.method == "POST":
-        form = CustomUserUpdate(data=request.POST,files=request.FILES, instance=user)
+        form = CustomUserUpdate(data=request.POST, files=request.FILES, instance=user)
         print(request.FILES)
         if form.is_valid():
             print(form.cleaned_data)
             form.save()
-            return render(request, "edit-user-panel.html", context={"form": form})
+            return render(request, "account/edit-user-panel.html", context={"form": form})
         else:
-            return render(request, "edit-user-panel.html", context={"form": form})  
+            return render(request, "account/edit-user-panel.html", context={"form": form})  
     else:
         form = CustomUserUpdate(instance = user)        
-        return render(request, "edit-user-panel.html", context={"form": form})    
+        return render(request, "account/edit-user-panel.html", context={"form": form})    
 
 
 @login_required(login_url=reverse_lazy("login"))   
 def user_panel(request):
-    return render(request, "user-panel.html") 
+    return render(request, "account/user-panel.html") 
     

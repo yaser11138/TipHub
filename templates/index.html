@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <html lang="en">
 {% load static %}
 <head>
@@ -24,7 +25,7 @@
 
                 <div class="d-flex flex-column flex-md-row align-items-center pr-md-4">
                     <div class="logo d-flex justify-content-center align-items-center ml-3">
-                        <a href="index.html"><img src={% static 'assets/image/logo.png' %} class="logo-img img-fluid" alt="" /></a>
+                        <a href="index.html"><img src="{% static 'assets/image/logo.png' %}" class="logo-img img-fluid" alt="" /></a>
                     </div>
                     <div class="nav-search-btn">
                         <input type="search" placeholder="جستجو">
@@ -152,7 +153,7 @@
                     <div class="bar3"></div>
                 </div>
                 <div class="logo">
-                    <a href="index.html"><img src={% static 'assets/image/logo.png' %} class="logo-img img-fluid" alt="" /></a>
+                    <a href="index.html"><img src="{% static 'assets/image/logo.png' %}" class="logo-img img-fluid" alt="" /></a>
                 </div>
 
                 <div class="d-flex align-items-center">
@@ -175,7 +176,7 @@
                         <div class="notification-box dropdown">
                             <a href="" class="btn login-btn" type="button" id="dropdownMenuButton"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src={{request.user.profile_picture.url}} alt="">
+                                <img src={{request.user.profile_picture.url}} alt="" alt="">
                             </a>
                             <div class="dropdown-menu account-menu-items custom-bg"
                                 aria-labelledby="dropdownMenuButton">
@@ -210,10 +211,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
             {% endif %}
             </section>
-        </div>
 
     </header>
 
@@ -279,7 +278,7 @@
                         <div class="custom-bg">
                             <div class="video-card">
                                 <a href="video-detail.html" class="position-relative d-block ">
-                                    <img src={% static 'assets/image/p1.jpg' %} alt="" class="img-fluid w-100 h-100">
+                                    <img src={% static 'assets/image/p1.jpg' %} alt="" class="img-fluid w-100 h-100" alt="">
                                     <div class="video-play-btn">
                                         <i class="fa fa-play"></i>
                                     </div>

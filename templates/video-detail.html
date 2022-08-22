@@ -1,4 +1,7 @@
 {% extends 'index.html' %}
+{% load static %}
+{% load extra_filters %}
+{% load jformat %}
 {% block main %}
 
     <main>
@@ -12,16 +15,17 @@
                             <div class="video-player-box">
                                 <div class="video-icon">
                                     <div class="btn video-btn" onclick="playvideo()" id="videobtn">
-                                        <img src="assets/image/play-video-btn.png" alt="">
+                                        <img src="{% static 'assets/image/play-video-btn.png' %}" alt="video-btn">
                                     </div>
                                 </div>
                                 <div class="video">
                                     <video width="100%" id="myVideo" autoplay>
-                                        <source src="assets/video/v1.mp4" type="video/mp4">
+                                        <source src="{{ post.video.url }}" type="video/mp4">
                                     </video>
-                                    <img src="assets/image/p2.jpg" width="100%" height="100%"
+                                    {% if post.video_thumbnail %}
+                                    <img src="{{post.video_thumbnail.url}}" width="100%" height="100%"
                                         class="position-absolute video-poster" alt="">
-
+                                    {% endif %}
                                     <div class="video-overlay"></div>
                                     <div class="video-description px-2 text-white">
 
@@ -32,10 +36,10 @@
                             </div>
                             <!-- end video -->
                             <!-- title -->
-                            <h3 class="video-title my-3"> تازه ترین ویدیو ها تازه ترین ویدیو ها تازه ترین ویدیو
+                            <h3 class="video-title my-3">{{ post.title }}
                             </h3>
                             <div class="d-flex align-items-center justify-content-between border-bottom pb-3">
-                                <p class="color78">22 مرداد 1401</p>
+                                <p class="color78">{{ post.publish|jformat:'%d %B %Y' }}</p>
                                 <div class="d-flex align-items-center view-like">
                                     <div class="mx-3">
                                         <span>22</span>
@@ -46,18 +50,12 @@
                                         <i class="fa fa-heart-o" type='button' aria-hidden="true"></i>
                                         <!-- <i class="fa fa-heart liked" type='button' aria-hidden="true" ></i> -->
                                     </div>
-
                                 </div>
-
                             </div>
                             <!-- description -->
                             <div class="border-bottom pb-3">
                                 <h4 class="my-3">درباره فیلم</h4>
-                                <p class="color78">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-                                    استفاده از طراحان
-                                    گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای
-                                    شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می
-                                    باشد</p>
+                                <p class="color78"> {{ post.body }}</p>
 
                                 <div class="labels">
                                     <h4 class="my-3">برچسب ها</h4>
@@ -70,7 +68,6 @@
                                 </div>
                             </div>
                             <!-- end des -->
-
                             <!-- comments -->
                             <div>
 
@@ -90,7 +87,7 @@
                                 <div class="comment my-3 p-2">
                                     <div class=" d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <img src="assets/image/sutdent-prof.png" alt="student" class="user-profile">
+                                            <img src="{% static 'assets/image/sutdent-prof.png' %}" alt="student" class="user-profile">
                                             <p class="user-name pr-2">امیرحسین امیری</p>
                                         </div>
 
@@ -111,7 +108,7 @@
                                 <div class="comment my-3 p-2">
                                     <div class=" d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <img src="assets/image/sutdent-prof.png" alt="student" class="user-profile">
+                                            <img src="{% static 'assets/image/sutdent-prof.png' %}" alt="student" class="user-profile">
                                             <p class="user-name pr-2">امیرحسین امیری</p>
                                         </div>
 
@@ -132,7 +129,7 @@
                                 <div class="comment my-3 p-2">
                                     <div class=" d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <img src="assets/image/sutdent-prof.png" alt="student" class="user-profile">
+                                            <img src="{% static 'assets/image/sutdent-prof.png' %}" alt="student" class="user-profile">
                                             <p class="user-name pr-2">امیرحسین امیری</p>
                                         </div>
 
@@ -153,7 +150,7 @@
                                 <div class="comment my-3 p-2 comment-child">
                                     <div class=" d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <img src="assets/image/sutdent-prof.png" alt="student" class="user-profile">
+                                            <img src="{% static 'assets/image/sutdent-prof.png' %}" alt="student" class="user-profile">
                                             <p class="user-name pr-2"> امیرحسین امیری</p>
                                         </div>
 
@@ -171,7 +168,7 @@
                                 <div class="comment my-3 p-2 comment-child">
                                     <div class=" d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <img src="assets/image/sutdent-prof.png" alt="student" class="user-profile">
+                                            <img src="{% static 'assets/image/sutdent-prof.png' %}" alt="student" class="user-profile">
                                             <p class="user-name pr-2">امیرحسین امیری</p>
                                         </div>
 
@@ -201,7 +198,7 @@
                                 <h4>درباره استاد</h4>
                             </div>
                             <div class="d-flex align-items-center py-3">
-                                <img src="assets/image/sutdent-prof.png" alt="student" class="teacher-profile">
+                                <img src="{% static 'assets/image/sutdent-prof.png' %}" alt="student" class="teacher-profile">
                                 <p class="user-name pr-2">امیرحسین امیری </p>
                             </div>
                             <p class="color78 teacher-description py-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک
@@ -228,6 +225,7 @@
 
 {% block script %}
     <script>
+
         // video-player
         const videobtn = document.querySelector('.video-btn');
         const video = document.querySelector('.video');

@@ -7,7 +7,7 @@ urlpatterns = [
     path("signup/", views.CustomSignupView.as_view(), name="register"),
     path("login/", views.CustomLoginView.as_view(), name="login"),
     path("logout/", views.logout, name="logout"),
-    path("user-panel/<int:user_id>/edit", views.edit_user_panel, name="edit-user-panel"),
+    path("user-panel/edit", views.edit_user_panel, name="edit-user-panel"),
     path("user-panel/", views.user_panel, name="user-panel"),
     path("forgot-password/", 
          auth_views.PasswordResetView.as_view(template_name = "forgot-password.html"),

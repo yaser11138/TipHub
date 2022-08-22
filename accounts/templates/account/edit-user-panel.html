@@ -17,10 +17,8 @@
                       <img src="{{ form.profile_picture.value.url }}" alt="">
                   </div>
                   <div class="change-profile-btn">
-                      <button class="btn custom-btn">
-                        <label style="cursor: pointer;" for='id_profile_picture'>تغییر عکس پروفایل <input type="file" style="opacity:0;" name="profile_picture" accept="image/*" id="id_profile_picture"></label>
-                      </button>
-                      {% if form.profile_picture.errors %}
+                        <label class="btn custom-btn"  style="cursor: pointer;" for='id_profile_picture'>تغییر عکس پروفایل <input class="btn custom-btn" type="file" style="opacity:0;width:3;" name="profile_picture" accept="image/*" id="id_profile_picture"></label>
+                      {% if form.profile_picture.errors %}s
                       <p>{{ form.profile_picture.errors|striptags}}</p>
                       {% endif %} 
                   </div> 
