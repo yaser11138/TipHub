@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load comments %}
+{% load comments_xtd %}
+{% load static %}
+{% load extra_filters %}
+
+<div id="comments" class="media-list">
+  {% for comment in comment_list %}
+
+<div class="comment my-3 p-2">
+    <div class=" d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center justify-content-center">
+            <img src="{% static 'assets/image/sutdent-prof.png' %}" alt="student" class="user-profile">
+            <p class="user-name pr-2">{{ comment.user_email }}</p>
+        </div>
+
+        <p class="comment-date-time"> {{  comment.submit_date | time_duration_calculator }}</p>
+    </div>
+    <p class="px-4 py-2 comment-text text-justify"> {{ comment.comment }}</p>
+
+    <div class="d-flex align-items-center justify-content-end reply" type='button'>
+        <i class="fa fa-reply"></i>
+        <p  onclick="ShowForm({{ comment.id }})">پاسخ به نظر</p>
+    </div>
+</div>
+ {% if not item.comment.is_removed and item.children %}
+      {% render_xtdcomment_tree with comments=item.children %}
+    {% endif %}
+  {% endfor %}
+</div>

@@ -1,11 +1,15 @@
 from django import template
 from jdatetime import datetime
+from pytz import timezone
+
 register = template.Library()
+
+iran_tz = timezone('Asia/Tehran')
 
 
 @register.filter(name='time_duration_calculator')
 def time_duration_calculator(time):
-    time_difference = abs(datetime.now() - time)
+    time_difference = abs(datetime.now(iran_tz) - time)
     if time_difference.days == 0:
         return "امروز"
     elif time_difference.days < 7:

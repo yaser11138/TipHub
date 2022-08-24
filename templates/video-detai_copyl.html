@@ -2,8 +2,6 @@
 {% load static %}
 {% load extra_filters %}
 {% load jformat %}
-{% load comments %}
-{% load comments_xtd %}
 {% block main %}
 
     <main>
@@ -73,22 +71,67 @@
                             <div>
 
                                 <div class="py-3">
-                                    {% get_comment_count for post as comment_count %}
-                                    <span>{{ comment_count }}</span>
+                                    <span>2982</span>
                                     <span>نظر</span>
                                 </div>
 
-                               {% render_comment_form for post %}
-                                    <br>
-                                {% if comment_count %}
-                                    <hr/>
-                                    <div class="comments">
-                                        {% render_xtdcomment_tree for post %}
+                                <form method="post" action="{% url 'add-comment' post.id %}">
+                                    {% csrf_token %}
+                                    <textarea class="w-100 p-2 comment-area" name="body" id="id_body" cols="30" rows="10"
+                                        placeholder="دیدگاه خود را بنویسید"></textarea>
+                                    <div class="d-flex align-items-center justify-content-end pt-3">
+                                        <button type="submit" class="btn custom-btn">ارسال نظر</button>
                                     </div>
-                                {% endif %}
-
-
+                                </form>
                                 <!-- comment -->
+                                {% if comments %}
+                                        {% for comment in comments %}
+                                        <div class="comment my-3 p-2">
+                                            <div class=" d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <img src="{% static 'assets/image/sutdent-prof.png' %}" alt="student" class="user-profile">
+                                                    <p class="user-name pr-2">{{ comment.author }}</p>
+                                                </div>
+
+                                                <p class="comment-date-time"> {{ comment.created | time_duration_calculator }}</p>
+                                            </div>
+                                            <p class="px-4 py-2 comment-text text-justify"> {{ comment.body }}</p>
+
+                                            <div class="d-flex align-items-center justify-content-end reply" type='button'>
+                                                <i class="fa fa-reply"></i>
+                                                <p  onclick="ShowForm({{ comment.id }})">پاسخ به نظر</p>
+                                            </div>
+                                        </div>
+                                            <form id="{{ comment.id }}" method="post"  action="{% url 'add-reply' post.id comment.id %}" style="display: none">
+                                                    {% csrf_token %}
+                                                    <textarea class="w-100 p-2 comment-area" name="body" id="id_body" cols="30" rows="10"
+                                                            placeholder="دیدگاه خود را بنویسید"></textarea>
+                                                    <div class="d-flex align-items-center justify-content-end pt-3">
+                                                    <button type="submit" class="btn custom-btn">ارسال نظر</button>
+                                                    </div>
+                                            </form>
+                                            {% if comment.replies  %}
+                                                {% for reply in comment.replies.all %}
+                                                           <div class="comment my-3 p-2 comment-child">
+                                                                 <div class=" d-flex align-items-center justify-content-between">
+                                                        <div class="d-flex align-items-center justify-content-center">
+                                                            <img src="{% static 'assets/image/sutdent-prof.png' %}" alt="student" class="user-profile">
+                                                            <p class="user-name pr-2">{{ reply.author }}</p>
+                                                        </div>
+
+                                                        <p class="comment-date-time"> {{ reply.created | time_duration_calculator }}</p>
+                                                    </div>
+                                                    <p class="px-4 py-2 comment-text text-justify"> {{ reply.body }}</p>
+
+                                                    <div class="d-flex align-items-center justify-content-end reply" type='button'>
+                                                        <i class="fa fa-reply"></i>
+                                                        <p  onclick="ShowForm({{ reply.id }})">پاسخ به نظر</p>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                {% endif %}
                                 <!-- end comment -->
                             </div>
                             <!-- end comments -->

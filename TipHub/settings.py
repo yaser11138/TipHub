@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'index',
     'blog_post',
+    'django_comments_xtd',
+    'django_comments',
     # allauth apps
     'allauth',
     'allauth.account',
@@ -184,3 +186,6 @@ PHONENUMBER_DEFAULT_REGION = "IR"
 PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
 
 
+# comments
+COMMENTS_APP = "django_comments_xtd"
+COMMENTS_XTD_MAX_THREAD_LEVEL = 2

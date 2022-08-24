@@ -10,6 +10,7 @@ urlpatterns = [
     path("", homepage, name="homepage"),
     path("blog/", include("blog_post.urls")),
     path("accounts/", include("accounts.urls")),
+    path("comments/", include('django_comments_xtd.urls')),
     path('accounts/', include('allauth.urls')),
 ]
 

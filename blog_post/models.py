@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django_jalali.db import models as jmodels
 from jdatetime import datetime
+from django_comments_xtd.moderation import XtdCommentModerator
+from django_comments_xtd import views
 User = get_user_model()
 
 
@@ -37,4 +39,32 @@ class Post(models.Model):
     objects = jmodels.jManager()
     published = PublishedManager()
 
+    ordering = ("-publish",)
+
+    def get_absolute_url(self):
+        return f"/blog/post/{self.id}"
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    body = models.TextField()
+    created = jmodels.jDateTimeField(auto_now_add=True)
+    updated = jmodels.jDateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    objects = jmodels.jManager()
+
+    class Meta:
+        ordering = ("-created",)
+
+    @property
+    def is_reply(self):
+        if self.parent:
+            return True
+        else:
+            return False
+
+    def __str__(self):
+        return f"Comment form {self.author.email} on {self.post}"
 
