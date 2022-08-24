@@ -40,11 +40,19 @@ def profile_picture_path(instance, filename):
 
 
 class CustomUser(AbstractUser):
-    username = models.CharField(_("username"),max_length=150,)
-    email = models.EmailField(verbose_name=_("Email Address"),unique=True)
+    username = models.CharField(_("username"), max_length=150,)
+    email = models.EmailField(verbose_name=_("Email Address"), unique=True)
     phone_number = PhoneNumberField(blank=True)
     profile_picture = models.ImageField(upload_to=profile_picture_path, default="sutdent-prof.png")
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
-    
+
+
+class Teacher(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    bio = models.TextField()
+    instagram = models.URLField(null=True, blank=True)
+    telegram = models.URLField(null=True, blank=True)
+    linkedin = models.URLField(null=True, blank=True)
+    github = models.URLField(null=True, blank=True)
