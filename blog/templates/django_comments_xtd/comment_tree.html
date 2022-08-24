@@ -1,0 +1,51 @@
+{% load i18n %}
+{% load comments %}
+{% load comments_xtd %}
+{% load static %}
+{% load extra_filters %}
+
+{% for item in comments %}
+<div class="media">
+  <div class="mr-3"></div>
+    <div class="media-body">
+        <div id="c{{ item.comment.id }}" class="comment my-3 p-2 {% if  item.comment.level > 0  %} comment-child {% endif %}">
+        <div class=" d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center justify-content-center">
+                <img src="{{ item.comment.user.profile_picture.url }}" alt="student" class="user-profile">
+                <p class="user-name pr-2">{{ item.comment.user_email }}</p>
+            </div>
+            <p class="comment-date-time"> {{  item.comment.submit_date | time_duration_calculator }}</p>
+        </div>
+        <p class="px-4 py-2 comment-text text-justify"> {{ item.comment.comment }}</p>
+         {% if item.comment.allow_thread and not item.comment.is_removed %}
+        <div class="d-flex align-items-center justify-content-end reply" type='button'>
+            <i class="fa fa-reply"></i>
+            <p  onclick="ShowForm({{ item.comment.id }})">پاسخ به نظر</p>
+        </div>
+        {% endif %}
+        </div>
+         <div id="{{ item.comment.id }}" style="display: none" >
+                {% get_comment_form for item.comment.content_object as form %}
+                <form action="{% comment_form_target %}" method="POST">
+                {% csrf_token %}
+                    <div class="row form-group {% if 'comment' in form.errors %}has-danger{% endif %}">
+                        <div class="offset-md-1 col-md-10">
+                            <textarea class="w-100 p-2 comment-area" name="comment" id="id_comment" cols="30" rows="10" placeholder="دیدگاه خود را بنویسید"></textarea>
+                        </div>
+                    </div>
+                <div style="display:none">{{ form.honeypot }}</div>
+                {{ form.content_type }}
+                {{ form.object_pk }}
+                <div><input type="hidden" name="reply_to" value="{{ item.comment.id }}" id="id_reply_to"></div>
+                {{ form.timestamp }}
+                {{ form.security_hash }}
+                <input type="hidden" name="next" value="{% url 'post-detail' item.comment.content_object.id %}" />
+                <button type="submit" class="btn custom-btn">ارسال نظر</button>
+                </form>
+         </div>
+    {% if not item.comment.is_removed and item.children %}
+      {% render_xtdcomment_tree with comments=item.children %}
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
