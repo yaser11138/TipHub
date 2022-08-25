@@ -41,6 +41,7 @@ class Post(models.Model):
     created = jmodels.jDateTimeField(auto_now_add=True)
     upadated = jmodels.jDateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=STATUS, default='draft')
+    likes = models.ManyToManyField(User)
     objects = jmodels.jManager()
     published = PublishedManager()
     enable_comments = models.BooleanField(default=True)

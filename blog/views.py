@@ -11,4 +11,10 @@ def post_detail(request, post_id):
     context = {
         "post": post,
     }
-    return render(request, "video-detail.html", context=context)
+    return render(request, "blog/video-detail.html", context=context)
+
+
+def post_like(request, post_id):
+    post = get_object_or_404(klass=Post, id=post_id)
+    post.likes.add(request.user)
+    return redirect(reverse("post-detail", args=[post_id]))

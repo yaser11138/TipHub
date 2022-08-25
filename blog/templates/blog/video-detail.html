@@ -4,6 +4,7 @@
 {% load jformat %}
 {% load comments %}
 {% load comments_xtd %}
+{% load hitcount_tags %}
 {% block main %}
 
     <main>
@@ -47,9 +48,19 @@
                                         <i class="fa fa-eye"></i>
                                     </div>
                                     <div>
-                                        <span>21</span>
-                                        <i class="fa fa-heart-o" type='button' aria-hidden="true"></i>
-                                        <!-- <i class="fa fa-heart liked" type='button' aria-hidden="true" ></i> -->
+                                    {% if request.user.is_authenticated %}
+                                        <span>{{ post.likes.all | length }}</span>
+                                            {% if request.user in post.likes.all %}
+                                                <i class="fa fa-heart liked" type='button' aria-hidden="true" ></i>
+                                            {% else %}
+                                                 <i class="fa fa-heart-o" type='button' onclick="document.getElementById('like').submit();" aria-hidden="true"></i>
+                                             {% endif %}
+                                        <form id="like"  method="post" action="{% url 'post-like' post.id %}">
+                                            {% csrf_token %}
+                                        </form>
+                                        {% else %}
+                                            <span>برای لایک کردن وارد حساب خود شوید</span>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -71,23 +82,27 @@
                             <!-- end des -->
                             <!-- comments -->
                             <div>
-
+                            {% if  request.user.is_authenticated %}
                                 <div class="py-3">
                                     {% get_comment_count for post as comment_count %}
                                     <span>{{ comment_count }}</span>
                                     <span>نظر</span>
                                 </div>
-
+                               {% if post.enable_comments %}
                                {% render_comment_form for post %}
+                               {% else %}
+                                   <p>کامنت ها برای این پست غیر فعال شده</p>
                                     <br>
+                               {% endif %}
                                 {% if comment_count %}
                                     <hr/>
                                     <div class="comments">
                                         {% render_xtdcomment_tree for post %}
                                     </div>
                                 {% endif %}
-
-
+                              {% else %}
+                                <p> شما باید ابتدا وارد شوید </p>
+                               {% endif %}
                                 <!-- comment -->
                                 <!-- end comment -->
                             </div>
@@ -97,28 +112,35 @@
                     </div>
                     <!-- main -->
                     <!-- side -->
+                {% with teacher=post.author.teacher %}
                     <aside class="col-md-4 ">
                         <div class="custom-bg p-2 teacher-card">
                             <div class="border-bottom py-3 text-center">
                                 <h4>درباره استاد</h4>
                             </div>
                             <div class="d-flex align-items-center py-3">
-                                <img src="{% static 'assets/image/sutdent-prof.png' %}" alt="student" class="teacher-profile">
-                                <p class="user-name pr-2">امیرحسین امیری </p>
+                                <img src="{{post.author.profile_picture.url }}" alt="student" class="teacher-profile">
+                                <p class="user-name pr-2"> {{ post.author.firstname}} {{ post.author.lastname}} </p>
                             </div>
-                            <p class="color78 teacher-description py-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک
-                                است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی
-                                تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد</p>
+                            <p class="color78 teacher-description py-3"> {{ teacher.bio }} </p>
 
                                 <div class="teacher-social-media d-flex align-items-center justify-content-center flex-wrap">
-                                    <a href=""> <i class="fa fa-instagram"></i></a>
-                                    <a href=""> <i class="fa fa-github"></i></a>
-                                    <a href=""> <i class="fa fa-linkedin"></i></a>
-                                    <a href=""> <i class="fa fa-twitter"></i></a>
+                                    {% if teacher.instagram %}
+                                    <a href="{{ teacher.instagram }}"> <i class="fa fa-instagram"></i></a>
+                                    {% endif %}
+                                    {% if teacher.github %}
+                                    <a href="{{ teacher.github }}"> <i class="fa fa-github"></i></a>
+                                    {% endif %}
+                                    {% if teacher.linkedin %}
+                                    <a href="{{ teacher.linkedin }}"> <i class="fa fa-linkedin"></i></a>
+                                    {% endif %}
+                                    {% if teacher.telegram %}
+                                    <a href="{{ teacher.telegram }}"> <i class="fa fa-telegram"></i></a>
+                                    {% endif %}
                                 </div>
                         </div>
                     </aside>
-
+                    {% endwith %}
                     <!-- end side -->
                 </div>
             </div>
@@ -126,7 +148,6 @@
 
     </main>
 {% endblock %}    
-
 
 {% block script %}
     <script>
@@ -176,4 +197,7 @@
         }
     </script>
     <script src="https://use.fontawesome.com/96472d4340.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="{% static 'hitcount/jquery.postcsrf.js' %}"></script>
+    {% insert_hit_count_js for post debug %}
 {% endblock %}
