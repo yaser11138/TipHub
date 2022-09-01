@@ -33,4 +33,4 @@ def link_to_local_user(sender, request, sociallogin, **kwargs):
     if user:
         if not user[0].socialaccount_set.filter(provider=sociallogin.account.provider):
             messages.warning(request, 'اکانت با ایمیل وجود دارد اما با استفاده از این طریق نمی توانید به ان وارد شوید')
-            raise ImmediateHttpResponse(redirect("login"))    
+            raise ImmediateHttpResponse(redirect("login"))

@@ -8,6 +8,8 @@ urlpatterns = [
     path("login/", views.CustomLoginView.as_view(), name="login"),
     path("logout/", views.logout, name="logout"),
     path("user-panel/edit", views.edit_user_panel, name="edit-user-panel"),
+    path("teacher-panel/", views.teacher_panel, name="teacher-panel"),
+    path("teacher-panel/edit/", views.edit_teacher_panel, name="edit-teacher-panel"),
     path("user-panel/", views.user_panel, name="user-panel"),
     path("forgot-password/", 
          auth_views.PasswordResetView.as_view(template_name = "forgot-password.html"),

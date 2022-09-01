@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 from django.contrib.auth import get_user_model
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetConfirmView
 from allauth.account.views import LoginView, SignupView
 from django.urls import reverse_lazy
-from .forms import CustomUserUpdate
+from .forms import CustomUserUpdateForm, TeacherUpdateFrom
+from .decorators import teacher_login_required
+from blog.models import Post
 User = get_user_model()
 
 
@@ -21,6 +24,7 @@ class CustomSignupView(SignupView):
         
 class CustomLoginView(LoginView):
     success_url = reverse_lazy("homepage")
+
     
 @login_required(login_url=reverse_lazy("login"))    
 def logout(request):
@@ -30,22 +34,49 @@ def logout(request):
 
 @login_required(login_url=reverse_lazy("login"))      
 def edit_user_panel(request):
-    user = get_object_or_404(klass=User, id=request.user.id) 
     if request.method == "POST":
-        form = CustomUserUpdate(data=request.POST, files=request.FILES, instance=user)
-        print(request.FILES)
+        form = CustomUserUpdateForm(data=request.POST, files=request.FILES, instance=request.user)
         if form.is_valid():
-            print(form.cleaned_data)
             form.save()
             return render(request, "account/edit-user-panel.html", context={"form": form})
         else:
-            return render(request, "account/edit-user-panel.html", context={"form": form})  
+            return render(request, "account/edit-user-panel.html", context={"form": form})
     else:
-        form = CustomUserUpdate(instance = user)        
-        return render(request, "account/edit-user-panel.html", context={"form": form})    
+        form = CustomUserUpdateForm(instance=request.user)
+        return render(request, "account/edit-user-panel.html", context={"form": form})
 
 
 @login_required(login_url=reverse_lazy("login"))   
 def user_panel(request):
     return render(request, "account/user-panel.html") 
-    
+
+
+@teacher_login_required
+def teacher_panel(request):
+    posts = Post.objects.all()
+    return render(request, "account/teacher-panel.html", context={"posts": posts})
+
+
+@teacher_login_required
+def edit_teacher_panel(request):
+    user_form = CustomUserUpdateForm(instance=request.user)
+    teacher_form = TeacherUpdateFrom(instance=request.user.teacher)
+    context = {
+        "user_form": user_form,
+        "teacher_form": teacher_form
+    }
+    if request.method == "POST":
+        print(request.POST)
+        user_form = CustomUserUpdateForm(data=request.POST, files=request.FILES, instance=request.user)
+        teacher_form = TeacherUpdateFrom(data=request.POST, instance=request.user.teacher)
+        if all([user_form.is_valid(), teacher_form.is_valid()]):
+            print(111111111111)
+            user_form.save()
+            teacher_form.save()
+            return render(request, "account\edit-user-panel.html", context=context)
+        else:
+            print(user_form.errors,teacher_form.errors)
+            return render(request, "account\edit-user-panel.html", context={"user_form": user_form,
+                                                                            "teacher_form": teacher_form})
+    else:
+        return render(request, "account\edit-user-panel.html", context=context)

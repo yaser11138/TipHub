@@ -1,0 +1,137 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load jformat %}
+{% load comments_xtd %}
+{% load hitcount_tags %}
+{% block main %}
+ <main>
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div>
+                             <h2> جدیدترین پست ها</h2>
+                             {% if posts %}
+                                {% for post in posts %}
+                                        <!-- video -->
+                                        <div class="video-player-box">
+                                            <div class="video-icon">
+                                                <div class="btn video-btn"  id="videobtn">
+                                                    <img src="{% static 'assets/image/play-video-btn.png' %}" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="video">
+                                                <video width="100%" id="myVideo" autoplay>
+                                                </video>
+                                                <img src="{{ post.video_thumbnail.url }}" width="100%" height="100%"
+                                                    class="position-absolute video-poster" alt="">
+                                                <div class="video-overlay"></div>
+                                            </div>
+                                        </div>
+                                        <!-- end video -->
+                                        <!-- title -->
+                                    {% if post.status != "published" %}
+                                        <h3 class="video-title my-3"><a href="{% url 'post-preview' post.id %}"> {{ post.title }} </a>
+                                    {% else %}
+                                        <h3 class="video-title my-3"><a href="{% url 'post-detail' post.id %}"> {{ post.title }} </a>
+                                    {% endif %}
+                                        </h3>
+                                        <div class="d-flex align-items-center justify-content-between border-bottom pb-3">
+                                            <p class="color78">{{ post.created|jformat:'%d %B %Y' }}</p>
+                                            <a href="{% url 'post-delete' post.id %}" class="btn btn-outline-danger" >حذف کردن</a>
+                                            <a href="{% url 'post-edit' post.id %}" class="btn btn-outline-secondary"> تغییر دادن</a>
+                                            <div class="d-flex align-items-center view-like">
+                                                <div class="mx-3">
+                                                    <span>{% get_hit_count for post %}</span>
+                                                    <i class="fa fa-eye"></i>
+                                                </div>
+                                                <div>
+                                                {% if not messages %}
+                                                    <span>{{ post.likes.all | length }}</span>
+                                                    {% if request.user in post.likes.all %}
+                                                        <i class="fa fa-heart liked" type='button' onclick="document.getElementById('like').submit();" aria-hidden="true" ></i>
+                                                    {% else %}
+                                                         <i class="fa fa-heart-o" type='button' onclick="document.getElementById('like').submit();" aria-hidden="true"></i>
+                                                    {% endif %}
+                                                    <form id="like"  method="post" action="{% url 'post-like' post.id %}">
+                                                        {% csrf_token %}
+                                                    </form>
+                                                {% else %}
+                                                    {% for message in messages %}
+                                                        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                {% endfor %}
+                            {% endif %}
+                            <!-- description -->
+                            <!-- end des -->
+
+                        </div>
+                    </div>
+                    <!-- main -->
+                    <!-- side -->
+                    <aside class="col-md-4 ">
+                        <div class="custom-bg p-2 teacher-card">
+                            <div class="border-bottom py-3 text-center">
+                                <h4> مشخصات</h4>
+                            </div>
+                            <div class="d-flex align-items-center py-3">
+                                <img src="{{ request.user.profile_picture.url }}" alt="student" class="teacher-profile">
+                            </div>
+                                    <div class="row">
+                                        {% if request.user.first_name %}
+                                        <div class="col-lg-6 mb-4">
+                                            <p class="">نام و نام خانوادگی:</p>
+                                            <h6 class=" font-weight-bold">{{ request.user.first_name }} {{ request.user.last_name }}</h6>
+                                        </div>
+                                        {% endif %}
+                                        {% if request.user.email %}
+                                        <div class="col-lg-6 mb-4">
+                                            <p class="">پست الکترونیک:</p>
+                                            <h6 class=" font-weight-bold">{{ request.user.email }}</h6>
+                                        </div>
+                                        {% endif %}
+                                        {% if request.user.phone_number %}
+                                        <div class="col-lg-6 mb-4">
+                                            <p class="">شماره تلفن همراه:</p>
+                                            <h6 class=" font-weight-bold">{{ request.user.phone_number|slugify }}</h6>
+                                        </div>
+                                        {% endif %}
+                                        {% if request.user.username %}
+                                        <div class="col-lg-6 mb-4">
+                                            <p class="">نام کاربری:</p>
+                                            <h6 class=" font-weight-bold">{{ request.user.username }}</h6>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <p class="">درباره من:</p>
+                                    {% if request.user.teacher.bio %}
+                                    <p class="color78 teacher-description py-3">{{ request.user.teacher.bio }}</p>
+                                      <div class="col-12">
+                                            <div class="text-center">
+                                                <a class="" href="{% url 'edit-teacher-panel
+                                                ' %}">
+                                                    <i class="fa fa-edit"></i>
+                                                    ویرایش اطلاعات شخصی
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    <hr>
+                                    <br>
+                                    <a class="btn btn-outline-secondary navbar-link"  href="{% url 'post-create' %}"  > ساخت پست جدید</a>
+                        </div>
+                    </aside>
+                    <!-- end side -->
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+{% block static %}
+    <script src="https://use.fontawesome.com/96472d4340.js"></script>
+{% endblock %}

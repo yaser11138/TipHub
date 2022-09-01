@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser, UserManager
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class CustomUserManager(UserManager):
     """Define a model manager for User model with no username field."""
 
@@ -42,17 +43,26 @@ def profile_picture_path(instance, filename):
 class CustomUser(AbstractUser):
     username = models.CharField(_("username"), max_length=150,)
     email = models.EmailField(verbose_name=_("Email Address"), unique=True)
-    phone_number = PhoneNumberField(blank=True)
-    profile_picture = models.ImageField(upload_to=profile_picture_path, default="sutdent-prof.png")
+    phone_number = PhoneNumberField(verbose_name=_("Phone Number"),  blank=True)
+    profile_picture = models.ImageField(verbose_name=_('Profile Picture'), upload_to=profile_picture_path,
+                                        default="sutdent-prof.png")
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
 
+    @property
+    def is_teacher(self):
+        return hasattr(self, "teacher")
+
 
 class Teacher(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    bio = models.TextField()
-    instagram = models.URLField(null=True, blank=True)
-    telegram = models.URLField(null=True, blank=True)
-    linkedin = models.URLField(null=True, blank=True)
-    github = models.URLField(null=True, blank=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, verbose_name=_("User"))
+    bio = models.TextField(verbose_name=_("Bio"))
+    instagram = models.URLField(null=True, blank=True, verbose_name=_("Instagram"))
+    telegram = models.URLField(null=True, blank=True, verbose_name=_("telegram"))
+    linkedin = models.URLField(null=True, blank=True, verbose_name=_("linkedin"))
+    github = models.URLField(null=True, blank=True, verbose_name=_("github"))
+
+    class Meta:
+        verbose_name = _("Teacher")
+        verbose_name_plural = _("Teachers")

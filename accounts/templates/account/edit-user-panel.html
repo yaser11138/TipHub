@@ -1,9 +1,9 @@
-{% extends 'index.html' %} 
-{% block main %} 
+{% extends 'index.html' %}
 {% load static %}
-
-{% block static  %} 
-  {% endblock %} 
+{% block style %}
+    <link rel="stylesheet" href={% static  'assets/css/style.css' %}>
+{% endblock %}
+{% block main %}
   <main>
     <section class="py-5">
       <div class="container">
@@ -14,60 +14,123 @@
             <div class="user-panel custom-bg">
               <div class="user-panel-box">
                   <div class="user-panel-profile">
-                      <img src="{{ form.profile_picture.value.url }}" alt="">
+                      <img src="{{ user_form.profile_picture.value.url }}" alt="">
                   </div>
                   <div class="change-profile-btn">
                         <label class="btn custom-btn"  style="cursor: pointer;" for='id_profile_picture'>تغییر عکس پروفایل <input class="btn custom-btn" type="file" style="opacity:0;width:3;" name="profile_picture" accept="image/*" id="id_profile_picture"></label>
-                      {% if form.profile_picture.errors %}s
-                      <p>{{ form.profile_picture.errors|striptags}}</p>
+                      {% if user_form.profile_picture.errors %}
+                      <p>{{ user_form.profile_picture.errors|striptags}}</p>
                       {% endif %} 
                   </div> 
                   <!-- item -->
-                  <div class="user-panel-field">
-                      <i class="fa fa-user"></i>
-                      <input class="email-input" type="text" name="first_name" value="{{ form.first_name.value }}" placeholder="نام "
-                          >  
+                  <div class="form-field">
+                      <div class="user-panel-field">
+                          <i class="fa fa-user"></i>
+                          <input class="email-input" type="text" name="first_name" value="{{ user_form.first_name.value }}" placeholder="نام ">
+                      </div>
+                      {% if user_form.first_name.errors %}
+                          <p>{{ user_form.first_name.errors|striptags}}</p>
+                      {% endif %}
                   </div>
                   <!-- item -->
-                  <div class="user-panel-field">
-                    <i class="fa fa-user"></i>
-                    <input class="email-input" type="text" name="last_name" value="{{ form.last_name.value }}" placeholder="نام خانوادگی"
-                        >    
-                </div>
-                  <!-- item -->
-                  <div class="user-panel-field">
-                      <i class="fa fa-envelope"></i>
-                      <input class="email-input" type="email" name="email" value="{{ form.email.value }}" placeholder="پست الکترونیک" dir="ltr" maxlength="50"
-                          disabled>   
-                 </div>
-                 
-                  <!-- item -->
-                  <div class="user-panel-field">
-                      <i class="fa fa-phone"></i>
-                      <input class="email-input" type="tel" name="phone_number" value="{{ form.phone_number.value }}" placeholder="شماره تلفن">
+                  <div class="form-field"  >
+                      <div class="user-panel-field">
+                        <i class="fa fa-user"></i>
+                        <input class="email-input" type="text" name="last_name" value="{{ user_form.last_name.value }}" placeholder="نام خانوادگی">
+                      </div>
+                      {% if user_form.last_name.errors %}
+                          <p>{{ user_form.last_name.errors|striptags}}</p>
+                      {% endif %}
                   </div>
-                
                   <!-- item -->
-                  <div class="user-panel-field">
-                      <i class="fa fa-user-circle"></i>
-                      <input class="" type="text" name="username" value="{{ form.username.value }}" placeholder="نام کاربری" >    
+                  <div class="form-field" >
+                      <div class="user-panel-field">
+                          <i class="fa fa-envelope"></i>
+                          <input class="email-input" type="email" name="email" value="{{ user_form.email.value }}" placeholder="پست الکترونیک" dir="ltr" maxlength="50" disabled>
+                      </div>
+                      {% if user_form.email.errors %}
+                          <p>{{ user_form.email.errors|striptags}}</p>
+                      {% endif %}
                   </div>
-                  
+                  <!-- item -->
+                  <div class="form-field" >
+                      <div class="user-panel-field">
+                          <i class="fa fa-phone"></i>
+                          <input class="email-input" type="tel" name="phone_number" value="{{ user_form.phone_number.value }}" placeholder="شماره تلفن">
+                      </div>
+                      {% if user_form.phone_number.errors %}
+                          <p>{{ user_form.phone_number.errors|striptags}}</p>
+                      {% endif %}
+                  </div>
+                  <!-- item -->
+                  <div class="form-field" >
+                      <div class="user-panel-field">
+                          <i class="fa fa-user-circle"></i>
+                          <input class="" type="text" name="username" value="{{ user_form.username.value }}" placeholder="نام کاربری" >
+                      </div>
+                      {% if user_form.username.errors %}
+                          <p>{{ user_form.username.errors|striptags}}</p>
+                      {% endif %}
+                  </div>
               </div>
-              {% if form.errors %}
-                  {% for error in form.errors.values  %}
-                          <p>{{ error|striptags}}</p>
-                          {% endfor %}        
-              {% endif %} 
+             <div class="">
+                    <label for="id_body"> درباره من </label>
+                    <textarea class="w-100 p-2 comment-area" name="bio" id="id_body" cols="30" rows="10">{{ teacher_form.bio.value }}</textarea>
+                    {% if teacher_form.bio.errors %}
+                      <p>{{ teacher_form.bio.errors|striptags}}</p>
+                      {% endif %}
+             </div>
+            <div class="user-panel-box">
+            <div class="form-field"  >
+                <div class="user-panel-field">
+                      <i class="fa fa-telegram fa-1" aria-hidden="true"></i>
+                      <input class="email-input left" type="text" name="telegram" value="{{ teacher_form.telegram.value }}" placeholder="تلگرام">
+                </div>
+                {% if teacher_form.telegram.errors %}
+                    <p>{{ teacher_form.telegram.errors|striptags}}</p>
+                {% endif %}
+            </div>
+            <div class="form-field"  >
+                  <div class="user-panel-field">
+                      <i class="fa fa-github"></i>
+                      <input class="email-input left" type="text" name="github" value="{{ teacher_form.github.value }}" placeholder="گیت هاب">
+                  </div>
+                  {% if teacher_form.github.errors %}
+                    <p>{{ teacher_form.github.errors|striptags}}</p>
+                {% endif %}
+            </div>
+            <div class="form-field"  >
+                  <div class="user-panel-field">
+                      <i class="fa fa-linkedin"></i>
+                      <input class="email-input left" type="text" name="linkedin" value="{{ teacher_form.linkedin.value }}" placeholder="لینکدین">
+                  </div>
+                  {% if teacher_form.linkedin.errors %}
+                      <p>{{ teacher_form.linkedin.errors|striptags}}</p>
+                  {% endif %}
+            </div>
+            <div class="form-field"  >
+                  <div class="user-panel-field">
+                      <i class="fa fa-instagram"></i>
+                      <input class="email-input left" type="text" name="instagram" value="{{ teacher_form.instagram.value }}" placeholder="اینستاگرام">
+                  </div>
+                  {% if teacher_form.instagram.errors %}
+                      <p>{{ teacher_form.instagram.errors|striptags}}</p>
+                  {% endif %}
+            </div>
+            </div>
+                <h1>{{ error1 }}</h1>
+                <h1>{{ error2 }}</h1>
               <div class="d-flex justify-content-center mt-3 ">
                   <button type="submit" class="btn custom-btn w-50">اعمال تغییرات</button>
               </div>
-            
             </div>
-          </form> 
+          </form>
           </div>
         </div>
       </div>
     </section>
   </main> 
-  {% endblock %}
+{% endblock %}
+{% block script %}
+    <script src="https://use.fontawesome.com/96472d4340.js"></script>
+{% endblock %}
