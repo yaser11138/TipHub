@@ -1011,9 +1011,16 @@ background-color: transparent;
     justify-content: space-between;
     
 }
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 .user-panel-field{
     position: relative;
-    width: 49%;
+    width: 100%;
     text-align: right;
     background: rgba(0, 0, 0, 0.05);
     margin: 10px 0px;
@@ -1022,6 +1029,7 @@ background-color: transparent;
     padding: 0px 10px;
     border-radius: 10px;
 }
+
 @media (max-width:768px){
     .user-panel-field{
         width: 100%;
@@ -1034,7 +1042,7 @@ background-color: transparent;
     display: flex;
     flex-grow: 1;
     padding: 10px 5px;
-background-color: transparent;
+    background-color: transparent;
 }
 .user-panel-field input::placeholder{
     color: #787878;

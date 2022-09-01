@@ -6,7 +6,6 @@
 {% load comments_xtd %}
 {% load hitcount_tags %}
 {% block main %}
-
     <main>
         <section class="py-5">
             <div class="container">
@@ -31,7 +30,7 @@
                                     <div class="video-overlay"></div>
                                     <div class="video-description px-2 text-white">
 
-                                        <p> 35 دقیقه</p>
+                                        <p> {{ post.get_video_duration }}</p>
                                     </div>
                                     <h5 class="close-btn" onclick="stopPlayer()">X</h5>
                                 </div>
@@ -44,14 +43,14 @@
                                 <p class="color78">{{ post.publish|jformat:'%d %B %Y' }}</p>
                                 <div class="d-flex align-items-center view-like">
                                     <div class="mx-3">
-                                        <span>22</span>
+                                        <span>{% get_hit_count for post %}</span>
                                         <i class="fa fa-eye"></i>
                                     </div>
                                     <div>
-                                    {% if request.user.is_authenticated %}
+                                    {% if not messages%}
                                         <span>{{ post.likes.all | length }}</span>
                                             {% if request.user in post.likes.all %}
-                                                <i class="fa fa-heart liked" type='button' aria-hidden="true" ></i>
+                                                <i class="fa fa-heart liked" type='button' onclick="document.getElementById('like').submit();" aria-hidden="true" ></i>
                                             {% else %}
                                                  <i class="fa fa-heart-o" type='button' onclick="document.getElementById('like').submit();" aria-hidden="true"></i>
                                              {% endif %}
@@ -59,7 +58,9 @@
                                             {% csrf_token %}
                                         </form>
                                         {% else %}
-                                            <span>برای لایک کردن وارد حساب خود شوید</span>
+                                            {% for message in messages %}
+                                                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                                            {% endfor %}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -104,10 +105,8 @@
                                 <p> شما باید ابتدا وارد شوید </p>
                                {% endif %}
                                 <!-- comment -->
-                                <!-- end comment -->
                             </div>
                             <!-- end comments -->
-
                         </div>
                     </div>
                     <!-- main -->
@@ -120,7 +119,7 @@
                             </div>
                             <div class="d-flex align-items-center py-3">
                                 <img src="{{post.author.profile_picture.url }}" alt="student" class="teacher-profile">
-                                <p class="user-name pr-2"> {{ post.author.firstname}} {{ post.author.lastname}} </p>
+                                <p class="user-name pr-2"> {{ post.author.first_name}} {{ post.author.last_name}} </p>
                             </div>
                             <p class="color78 teacher-description py-3"> {{ teacher.bio }} </p>
 
@@ -163,6 +162,7 @@
 
         }
         // video-player
+        const vid = document.getElementById("myVideo");
         const videobtn = document.querySelector('.video-btn');
         const video = document.querySelector('.video');
         const videotag = document.querySelector('video')
@@ -199,5 +199,6 @@
     <script src="https://use.fontawesome.com/96472d4340.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="{% static 'hitcount/jquery.postcsrf.js' %}"></script>
-    {% insert_hit_count_js for post debug %}
+    {% insert_hit_count_js for post  %}
+
 {% endblock %}

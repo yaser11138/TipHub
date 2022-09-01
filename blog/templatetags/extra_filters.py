@@ -4,25 +4,25 @@ from pytz import timezone
 
 register = template.Library()
 
-iran_tz = timezone('Asia/Tehran')
+#iran_tz = timezone('Asia/Tehran')
 
 
 @register.filter(name='time_duration_calculator')
 def time_duration_calculator(time):
-    time_difference = abs(datetime.now(iran_tz) - time)
+    time_difference = abs(datetime.now() - time)
     if time_difference.days == 0:
         return "امروز"
     elif time_difference.days < 7:
-        return f" روز پیش{time_difference.days}"
+        return f"{time_difference.days} روز پیش  "
     elif time_difference.days < 30:
         weeks = time_difference.days // 7
-        return f" هفته پیش{weeks}"
+        return f"{weeks} هفته پیش  "
     elif time_difference.days < 365:
         months = time_difference.days // 30
-        return f" ماه پیش{months}"
+        return f"{months} ماه پیش  "
     elif time_difference.days >= 365:
         years = time_difference.days // 365
-        return f" سال پیش{years}"
+        return f"{years} سال پیش   "
 
 
 @register.filter(name='date_format')

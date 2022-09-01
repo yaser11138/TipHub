@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+{% block main %}
+ <main>
+     <section class="py-5">
+         <div class="container">
+             <div class="row d-flex justify-content-center">
+                <div class="col-sm-9 col-md-11 col-lg-10">
+                    <div class="user-panel custom-bg">
+                        <form method="post"  enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- item -->
+                            <div class="user-panel-field">
+                                <i class="fa fa-post"></i>
+                                <input class="text" name="title" type="text" value="{{ form.title.value }}" placeholder='عنوان پست' required="">
+                            </div>
+                            {% if form.title.errors %}
+                                <p> {{ form.title.errors | striptags}} </p>
+                            {% endif %}
+                            <!-- item -->
+                            <textarea class="w-100 p-2 comment-area"  name="body" id="id_comment" cols="30" rows="10">{{ form.body.value }}</textarea>
+                            {% if form.body.errors %}
+                                <p> {{ form.body.errors | striptags}} </p>
+                            {% endif %}
+                            <!-- item -->
+                            <div class="user-panel-field">
+                            <label class="btn custom-btn"  style="cursor: pointer;" for='id_video'> ویدیو <input  type="file" style="opacity: 0;" name="video"  accept="video/*"  id="id_video" ></label>
+                            </div>
+                            {% if from.video.errors %}
+                                <p> {{ form.video.errors | striptags}} </p>
+                            {% endif %}
+                            <!-- item -->
+                            <div class="user-panel-field">
+                            <label class="btn custom-btn"  style="cursor: pointer;"   for='id_video_thumbnail'> عکس ویدیو <input type="file" style="opacity: 0;"  name="video_thumbnail"  accept="image/*" id="id_video_thumbnail"></label>
+                            </div>
+                            {% if form.video_thumbnail.errors %}
+                                <p> {{ form.video_thumbnail.errors | striptags}} </p>
+                            {% endif %}
+                            <div>
+                                <select class="select2-dropdown" name="status" id="id_status" >
+                                    <option value="draft"  {% if form.status.value  == "draft" %} selected="" {% endif %} >     ذخیره     </option>
+                                    <option value="published" {% if form.status.value  == "published" %} selected="" {% endif %}>  انتشار    </option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="id_enable_comments"> فعال سازی کامنت</label>
+                                <input type="checkbox" name="enable_comments" id="id_enable_comments" {% if form.enable_comments.value  %} checked {% endif %}>
+                            </div>
+                            <div class="d-flex justify-content-center mt-3 ">
+                                <button type="submit" class="btn custom-btn ">ذخیره پست</button>
+                            </div>
+                        </form>
+                    </div>
+                  </div>
+               </div>
+            </div>
+     </section>
+ </main>
+{% endblock main %}
+{% block static %}
+<script src="https://use.fontawesome.com/96472d4340.js"></script>
+{% endblock %}
