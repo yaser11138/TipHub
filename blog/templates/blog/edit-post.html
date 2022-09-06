@@ -41,6 +41,10 @@
                                     <option value="published" {% if form.status.value  == "published" %} selected="" {% endif %}>  انتشار    </option>
                                 </select>
                             </div>
+                             <div>
+                                <label> دسته بندی </label>
+                                {{ form.category }}
+                             </div>
                             <div>
                                 <label for="id_enable_comments"> فعال سازی کامنت</label>
                                 <input type="checkbox" name="enable_comments" id="id_enable_comments" {% if form.enable_comments.value  %} checked {% endif %}>

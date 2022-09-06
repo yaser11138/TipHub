@@ -10,6 +10,7 @@
     <link rel="stylesheet" href={% static 'assets/components/bootstrap/bootstrap-rtl.min.css' %}>
     <link rel="stylesheet" href={% static 'assets/components/owl-carousel/owl.carousel.min.css' %}>
     <link rel="stylesheet" href={% static  'assets/css/style.css' %}>
+    {% block style %}{% endblock %}
     <title> مجله</title>
 </head>
 
@@ -87,67 +88,13 @@
                     </div>
                 </div>
                 {% endif %}
-
+                {% for category in category %}
                 <nav class="nav-menu p-0 m-0 d-flex d-sm-flex d-md-none d-lg-none">
-                    <li id="" class="mx-3"><a class="nav-menu-item-mob">زبان های برنامه نویسی
-                        <i class="fa fa-chevron-left chev-icon pr-1"></i>
-                        </a>
-                        <ul class="sub-menu-mob">
-                            <a href="">جاوا</a>
-                            <a href="">پایتون </a>
-                            <a href="">آیتم</a>
-                            <a href=""> آیتم</a>
-                            <a href="">آیتم</a>
-                            <a href="">آیتم</a>
-                            <a href="">آیتم</a>
-                        </ul>
+                    <li id="" class="mx-3"><a href="{% url 'post-filter-by-category' category.slug %}" class="nav-menu-item-mob"> {{ category.name }} <i class="fa fa-chevron-left chev-icon pr-1"></i></a>
                     </li>
-                    <li id="" class="mx-3"><a class="nav-menu-item-mob ">فریمورک
-                        <i class="fa fa-chevron-left chev-icon pr-1"></i>
-                        </a>
-                        <ul class="sub-menu-mob">
-                            <a href="">جاوا</a>
-                            <a href="">پایتون </a>
-                            <a href="">آیتم</a>
-                            <a href=""> آیتم</a>
-                            <a href="">آیتم</a>
-                            <a href="">آیتم</a>
-                            <a href="">آیتم</a>
-                        </ul>
-                    </li>
-                    <li id="" class="mx-3">
-                        <a class="nav-menu-item-mob ">طراحی وب
-                            <i class="fa fa-chevron-left chev-icon pr-1"></i>
-                        </a>
-                        <ul class="sub-menu-mob">
-                            <a href="">جاوا</a>
-                            <a href="">پایتون </a>
-                            <a href="">آیتم</a>
-                            <a href=""> آیتم</a>
-                            <a href="">آیتم</a>
-                            <a href="">آیتم</a>
-                            <a href="">آیتم</a>
-                        </ul>
-                    </li>
-                    <li id="" class="mx-3"><a class="nav-menu-item-mob">زبان های برنامه نویسی
-                        <i class="fa fa-chevron-left chev-icon pr-1"></i>
-                        </a>
-                        <ul class="sub-menu-mob">
-                            <a href="">جاوا</a>
-                            <a href="">پایتون </a>
-                            <a href="">آیتم</a>
-                            <a href=""> آیتم</a>
-                            <a href="">آیتم</a>
-                            <a href="">آیتم</a>
-                            <a href="">آیتم</a>
-                        </ul>
-                    </li>
-
                 </nav>
-
+                {% endfor %}
             </div>
-
-
             <section
                 class="nav-header-box-mob d-flex d-sm-flex d-md-none  align-items-center justify-content-between d-md-none d-lg-none position-fixed">
 
@@ -221,50 +168,9 @@
     </header>
 
     <nav class="nav-menu nav-menu-pc  d-none d-md-flex px-4" id="navbar">
-        <li id="" class="mx-3 menu-item"><a href="" class="nav-menu-item ">زبان های برنامه نویسی </a>
-            <ul class="sub-menu">
-                <a href="">جاوا</a>
-                <a href="">پایتون </a>
-                <a href="">آیتم</a>
-                <a href=""> آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-            </ul>
-        </li>
-        <li id="" class="mx-3 menu-item"><a href="" class="nav-menu-item">فریمورک </a>
-            <ul class="sub-menu">
-                <a href="">جنگو</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-            </ul>
-        </li>
-        <li id="" class="mx-3 menu-item"><a href="" class="nav-menu-item">طراحی وب</a>
-            <ul class="sub-menu">
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-            </ul>
-        </li>
-        <li id="" class="mx-3 menu-item"><a href="" class="nav-menu-item">مهارت های ارتباطی</a>
-            <ul class="sub-menu">
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-                <a href="">آیتم</a>
-            </ul>
-        </li>
+        {% for category in categories %}
+                    <li id="" class="mx-3 menu-item"><a href="{% url 'post-filter-by-category' category.slug %}" class="nav-menu-item"> {{ category.name }} <i class="fa fa-chevron-left chev-icon pr-1"></i></a></li>
+        {% endfor %}
     </nav>
 {% block main  %}
     <main>

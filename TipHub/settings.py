@@ -13,11 +13,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from decouple import config
 from django.shortcuts import redirect
+from django.utils.text import slugify
 from django.urls import reverse_lazy
 import locale
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -25,12 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -46,9 +45,11 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'phonenumber_field',
     'index',
-    'blog_post',
+    'blog',
     'django_comments_xtd',
     'django_comments',
+    'hitcount',
+    'taggit',
     # allauth apps
     'allauth',
     'allauth.account',
@@ -80,13 +81,13 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'blog.category_context_processor.category_processor'
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = "TipHub.wsgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -97,7 +98,6 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -117,19 +117,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'fa-ir'
+
+LANGUAGE_CODE = 'fa'
 locale.setlocale(locale.LC_ALL, 'Persian_Iran')
 
 TIME_ZONE = "Asia/Tehran"
 
 USE_I18N = True
+USE_L10N = True
 
-USE_TZ = True
-
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -168,8 +168,9 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 ACCOUNT_LOGOUT_ON_GET = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory' 
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 SITE_ID = 2
+login_url = reverse_lazy("login")
 LOGIN_REDIRECT_URL = reverse_lazy("homepage")
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -185,7 +186,10 @@ PHONENUMBER_DB_FORMAT = "NATIONAL"
 PHONENUMBER_DEFAULT_REGION = "IR"
 PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
 
-
 # comments
 COMMENTS_APP = "django_comments_xtd"
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
+DEFAULT_FROM_EMAIL = "noreplay@TipHub.com"
+COMMENTS_XTD_LIST_ORDER = ('-thread_id', 'order')
+
+AUTOSLUG_SLUGIFY_FUNCTION = lambda slug: slugify(slug, allow_unicode=True)

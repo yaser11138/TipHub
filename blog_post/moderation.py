@@ -1,1 +1,0 @@
-from django_comments_xtd.moderation import XtdCommentModerator

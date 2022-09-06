@@ -1,29 +1,37 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib import messages
-from .models import Post
+from .models import Post, Category
 from .forms import PostForm
 from accounts.decorators import teacher_login_required
+from jdatetime import date
 
 
-def post_detail(request, post_id):
-    post = get_object_or_404(klass=Post, id=post_id)
+def post_detail(request, year, month, day, slug):
+    publish_date = date(year=year, month=month, day=day).strftime("%Y-%m-%d")
+    post = get_object_or_404(klass=Post, slug=slug, publish=publish_date)
     context = {
         "post": post,
     }
     return render(request, "blog/video-detail.html", context=context)
 
 
+def post_filter_by_category(request, category_slug):
+    posts = Post.published.filter(category__slug=category_slug)
+    return render(request, "blog/blog_filter_by_category.html", context={"posts": posts})
+
+
 def post_like(request, post_id):
+    post = get_object_or_404(klass=Post, id=post_id)
     if request.user.is_authenticated:
-        post = get_object_or_404(klass=Post, id=post_id)
         if request.user not in post.likes.all():
             post.likes.add(request.user)
         else:
             post.likes.remove(request.user)
     else:
         messages.add_message(request, messages.ERROR, "برای لایک کردن ابتدا وارد حساب کاربری خود شوید")
-    return redirect(reverse("post-detail", args=[post_id]))
+    return redirect(reverse("post-detail", args=[post.publish.year, post.publish.month,
+                                                 post.publish.day, post.slug]))
 
 
 @teacher_login_required
@@ -34,6 +42,7 @@ def post_create(request):
             post = post_form.save(commit=False)
             post.author = request.user
             post.save()
+            post_form.save_m2m()
             return redirect(reverse("teacher-panel"))
         else:
             return render(request, "blog/create-post.html", context={"form": post_form})
@@ -44,7 +53,7 @@ def post_create(request):
 
 @teacher_login_required
 def perview_post(request, post_id):
-    post = get_object_or_404(klass=Post, id=post_id, user=request.user)
+    post = get_object_or_404(klass=Post, id=post_id, author=request.user)
     context = {
         "post": post,
     }

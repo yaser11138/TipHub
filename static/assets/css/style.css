@@ -1038,6 +1038,9 @@ background-color: transparent;
 .user-panel-field i{
     color: #787878;
 }
+.left {
+    text-align: left;
+}
 .user-panel-field input{
     display: flex;
     flex-grow: 1;

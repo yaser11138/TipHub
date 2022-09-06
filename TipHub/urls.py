@@ -8,9 +8,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", homepage, name="homepage"),
-    path("blog/", include("blog_post.urls")),
+    path("blog/", include("blog.urls")),
     path("accounts/", include("accounts.urls")),
     path("comments/", include('django_comments_xtd.urls')),
+    path('hitcount/', include('hitcount.urls', namespace='hitcount')),
     path('accounts/', include('allauth.urls')),
 ]
 

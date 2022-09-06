@@ -36,12 +36,22 @@
                             <p> {{ form.video_thumbnail.errors | striptags}} </p>
                             {% endif %}
                             <div>
+                                <label> دسته بندی </label>
+                                {{ form.category }}
+                             </div>
+                            <div>
+                                <label> حالت پست </label>
                                 <select class="select2-dropdown" name="status" id="id_status">
                                     <option value="draft" selected="">ذخیره</option>
                                     <option value="published">انتشار</option>
                                 </select>
                             </div>
+
+                            <lable> فعال سازی کامنت ها  </lable>
                             <input type="checkbox" name="enable_comments" id="id_enable_comments" checked>
+                            <div class="user-panel-field">
+                                <input type="text" name="tags" {% if form.tags.value %} value="{{ form.tags.value }}" {% endif %}  placeholder="تگ ها:  {{ form.tags.help_text }}" id="id_tags">
+                            </div>
                             <div class="d-flex justify-content-center mt-3 ">
                                 <button type="submit" class="btn custom-btn ">ذخیره پست</button>
                             </div>

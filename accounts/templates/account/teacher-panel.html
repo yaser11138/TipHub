@@ -31,9 +31,9 @@
                                         <!-- end video -->
                                         <!-- title -->
                                     {% if post.status != "published" %}
-                                        <h3 class="video-title my-3"><a href="{% url 'post-preview' post.id %}"> {{ post.title }} </a>
+                                        <h3 class="video-title my-3"><a href="{% url 'post-edit' post.id %}"> {{ post.title }} </a>
                                     {% else %}
-                                        <h3 class="video-title my-3"><a href="{% url 'post-detail' post.id %}"> {{ post.title }} </a>
+                                        <h3 class="video-title my-3"><a href="{% url 'post-detail' post.publish.year post.publish.month post.publish.day post.slug %}"> {{ post.title }} </a>
                                     {% endif %}
                                         </h3>
                                         <div class="d-flex align-items-center justify-content-between border-bottom pb-3">
@@ -113,8 +113,7 @@
                                     <p class="color78 teacher-description py-3">{{ request.user.teacher.bio }}</p>
                                       <div class="col-12">
                                             <div class="text-center">
-                                                <a class="" href="{% url 'edit-teacher-panel
-                                                ' %}">
+                                                <a class="" href="{% url 'edit-teacher-panel' %}">
                                                     <i class="fa fa-edit"></i>
                                                     ویرایش اطلاعات شخصی
                                                 </a>

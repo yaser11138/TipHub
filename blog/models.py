@@ -6,7 +6,8 @@ from django.utils.translation import gettext as _
 from django.core.validators import FileExtensionValidator, validate_image_file_extension
 from django.template import loader
 from django.shortcuts import redirect
-from django.contrib.contenttypes.fields import GenericRelation
+from django_comments.models import Comment
+from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
 from django.conf import settings
 from django_comments_xtd.moderation import moderator
 from django_comments.moderation import CommentModerator, get_current_site, send_mail
@@ -14,9 +15,19 @@ from django_comments_xtd import views
 from django_comments_xtd.models import XtdComment
 from django_jalali.db import models as jmodels
 from hitcount.models import HitCount
+from taggit.managers import TaggableManager
 from jdatetime import datetime, timedelta
+from autoslug import AutoSlugField
 now = datetime.now().strftime("%Y/%m/%d")
 User = get_user_model()
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=30, verbose_name=_("name"))
+    slug = models.SlugField(unique=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 def remove_sepical_characters(text):
@@ -40,6 +51,7 @@ class PublishedManager(models.Manager):
 
 
 class Post(models.Model):
+    objects = jmodels.jManager()
     STATUS = (
         ("draft", 'Draft'),
         ("published", 'Published')
@@ -48,6 +60,7 @@ class Post(models.Model):
     title = models.CharField(max_length=250, verbose_name=_("title"))
     slug = models.SlugField(max_length=250, allow_unicode=True, verbose_name=_("slug"))
     body = models.TextField(verbose_name=_("body"))
+    category = models.ForeignKey(Category, related_name="posts",on_delete=models.SET_NULL, null=True)
     video = models.FileField(upload_to=blog_video_path, validators=[FileExtensionValidator(['mp4'])],
                              verbose_name=_("video"))
     video_thumbnail = models.ImageField(upload_to=blog_video_thumbnail_path,
@@ -57,8 +70,9 @@ class Post(models.Model):
     created = jmodels.jDateTimeField(auto_now_add=True, verbose_name=_("created"))
     upadated = jmodels.jDateTimeField(auto_now=True, verbose_name=_("updated"))
     likes = models.ManyToManyField(User, blank=True, verbose_name=_("likes"))
+    comments = GenericRelation(Comment, object_id_field="object_pk")
     views = GenericRelation(HitCount, object_id_field='object_pk',)
-    objects = jmodels.jManager()
+    tags = TaggableManager(verbose_name=_("tags"))
     published = PublishedManager()
     enable_comments = models.BooleanField(default=True, verbose_name=_("enable_comments"))
 
@@ -93,7 +107,6 @@ class PostModerator(CommentModerator):
         """
         Send email notification of a new comment to post author when email
         notifications have been requested.
-
         """
         if not self.email_notification:
             return

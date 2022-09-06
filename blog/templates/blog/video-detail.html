@@ -119,10 +119,9 @@
                             </div>
                             <div class="d-flex align-items-center py-3">
                                 <img src="{{post.author.profile_picture.url }}" alt="student" class="teacher-profile">
-                                <p class="user-name pr-2"> {{ post.author.first_name}} {{ post.author.last_name}} </p>
+                                <a href="{% url 'teacher-info' request.user.id %}" ><p class="user-name pr-2"> {{ post.author.first_name}} {{ post.author.last_name}} </p></a>
                             </div>
                             <p class="color78 teacher-description py-3"> {{ teacher.bio }} </p>
-
                                 <div class="teacher-social-media d-flex align-items-center justify-content-center flex-wrap">
                                     {% if teacher.instagram %}
                                     <a href="{{ teacher.instagram }}"> <i class="fa fa-instagram"></i></a>

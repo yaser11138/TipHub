@@ -8,6 +8,7 @@ from allauth.account.views import LoginView, SignupView
 from django.urls import reverse_lazy
 from .forms import CustomUserUpdateForm, TeacherUpdateFrom
 from .decorators import teacher_login_required
+from .models import Teacher
 from blog.models import Post
 User = get_user_model()
 
@@ -53,8 +54,14 @@ def user_panel(request):
 
 @teacher_login_required
 def teacher_panel(request):
-    posts = Post.objects.all()
+    posts = Post.objects.filter(author=request.user).order_by("publish")
     return render(request, "account/teacher-panel.html", context={"posts": posts})
+
+
+def teacher_info(request, user_id):
+    author = get_object_or_404(klass=User, id=user_id)
+    posts = Post.published.filter(author=author)
+    return render(request, "account/teacher-info.html", context={"posts": posts, "user": author})
 
 
 @teacher_login_required
@@ -66,16 +73,13 @@ def edit_teacher_panel(request):
         "teacher_form": teacher_form
     }
     if request.method == "POST":
-        print(request.POST)
         user_form = CustomUserUpdateForm(data=request.POST, files=request.FILES, instance=request.user)
         teacher_form = TeacherUpdateFrom(data=request.POST, instance=request.user.teacher)
         if all([user_form.is_valid(), teacher_form.is_valid()]):
-            print(111111111111)
             user_form.save()
             teacher_form.save()
             return render(request, "account\edit-user-panel.html", context=context)
         else:
-            print(user_form.errors,teacher_form.errors)
             return render(request, "account\edit-user-panel.html", context={"user_form": user_form,
                                                                             "teacher_form": teacher_form})
     else:
