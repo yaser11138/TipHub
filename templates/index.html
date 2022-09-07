@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 {% endif %}
-                {% for category in category %}
+                {% for category in categories %}
                 <nav class="nav-menu p-0 m-0 d-flex d-sm-flex d-md-none d-lg-none">
                     <li id="" class="mx-3"><a href="{% url 'post-filter-by-category' category.slug %}" class="nav-menu-item-mob"> {{ category.name }} <i class="fa fa-chevron-left chev-icon pr-1"></i></a>
                     </li>

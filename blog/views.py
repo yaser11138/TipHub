@@ -1,3 +1,4 @@
+import hitcount.views
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib import messages
@@ -17,8 +18,16 @@ def post_detail(request, year, month, day, slug):
 
 
 def post_filter_by_category(request, category_slug):
-    posts = Post.published.filter(category__slug=category_slug)
-    return render(request, "blog/blog_filter_by_category.html", context={"posts": posts})
+    category = get_object_or_404(klass=Category, slug=category_slug)
+    if request.GET.get("tag"):
+        posts = Post.published.filter(category__slug=category_slug, tags__slug__in=[request.GET.get("tag")])
+    else:
+        posts = Post.published.filter(category__slug=category_slug)
+    context = {
+        "posts": posts,
+        "category": category,
+    }
+    return render(request, "blog/blog_filter_by_category.html", context=context)
 
 
 def post_like(request, post_id):
@@ -38,6 +47,7 @@ def post_like(request, post_id):
 def post_create(request):
     if request.method == "POST":
         post_form = PostForm(request.POST, request.FILES)
+        print(post_form)
         if post_form.is_valid():
             post = post_form.save(commit=False)
             post.author = request.user
@@ -76,6 +86,7 @@ def post_edit(request, post_id):
             post_form.save()
             return render(request, "blog/edit-post.html", context={"form": post_form})
         else:
+            print(post_form.errors)
             return render(request, "blog/edit-post.html", context={"form": post_form})
     else:
         post_form = PostForm(instance=post)

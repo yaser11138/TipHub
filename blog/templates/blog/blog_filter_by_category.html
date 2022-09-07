@@ -9,6 +9,15 @@
     <main>
         <section class="py-5">
             <div class="container">
+                <div class="d-flex flex-md-row justify-content-center align-items-center" style="gap: 5px">
+                    <a href="{% url 'post-filter-by-category' category.slug %}?tag=پایتون" ><button type="submit"  class="btn btn-info">پایتون</button></a>
+                    <a href="{% url 'post-filter-by-category' category.slug %}?tag=جاوا-اسکریپت" ><button class="btn btn-warning">جاوا اسکریپت</button></a>
+                    <a href="{% url 'post-filter-by-category' category.slug %}?tag=جاوا" ><button class="btn btn-primary">جاوا</button></a>
+                    <a href="{% url 'post-filter-by-category' category.slug %}?tag=PHP" ><button class="btn btn-danger">PHP</button></a>
+                    <a href="{% url 'post-filter-by-category' category.slug %}?tag=آشنایی"><button class="btn btn-success">آشنایی</button></a>
+                    <a href="{% url 'post-filter-by-category' category.slug %}?tag=نکات-ریز"><button class="btn btn-dark">نکات ریز</button></a>
+                    <a href="{% url 'post-filter-by-category' category.slug %}?tag=پکیج های-آماده"><button class="btn btn-light">پکیج های آماده</button></a>
+                </div>
                 <div class="row">
                     {% for post in posts %}
                     <div class="col-md-6 col-lg-4 my-2">

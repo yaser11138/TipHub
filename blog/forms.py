@@ -25,6 +25,7 @@ class PostForm(forms.ModelForm):
             post.publish = date.today()
         if commit:
             post.save()
+            self._save_m2m()
         return post
 
 

@@ -1,4 +1,5 @@
 {% extends 'index.html' %}
+{% load extra_filters %}
 {% block main %}
  <main>
      <section class="py-5">
@@ -36,6 +37,7 @@
                                 <p> {{ form.video_thumbnail.errors | striptags}} </p>
                             {% endif %}
                             <div>
+                                <label> وضعیت پست </label>
                                 <select class="select2-dropdown" name="status" id="id_status" >
                                     <option value="draft"  {% if form.status.value  == "draft" %} selected="" {% endif %} >     ذخیره     </option>
                                     <option value="published" {% if form.status.value  == "published" %} selected="" {% endif %}>  انتشار    </option>
@@ -45,9 +47,13 @@
                                 <label> دسته بندی </label>
                                 {{ form.category }}
                              </div>
+                            <div class="user-panel-field">
+                                <input type="text" name="tags" {% if form.tags.value %} value="{{ form.tags.value|tags_format }}" {% endif %}  placeholder="تگ ها:  {{ form.tags.help_text }}" id="id_tags">
+                            </div>
+
                             <div>
                                 <label for="id_enable_comments"> فعال سازی کامنت</label>
-                                <input type="checkbox" name="enable_comments" id="id_enable_comments" {% if form.enable_comments.value  %} checked {% endif %}>
+                                <input type="checkbox" name="enable_comments" id="id_enable_comments" {% if c.enable_comments.value  %} checked {% endif %}>
                             </div>
                             <div class="d-flex justify-content-center mt-3 ">
                                 <button type="submit" class="btn custom-btn ">ذخیره پست</button>

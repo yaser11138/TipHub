@@ -14,7 +14,7 @@ from django_comments.moderation import CommentModerator, get_current_site, send_
 from django_comments_xtd import views
 from django_comments_xtd.models import XtdComment
 from django_jalali.db import models as jmodels
-from hitcount.models import HitCount
+from hitcount.models import HitCount, HitCountMixin
 from taggit.managers import TaggableManager
 from jdatetime import datetime, timedelta
 from autoslug import AutoSlugField
@@ -30,6 +30,7 @@ class Category(models.Model):
         return self.name
 
 
+# remove_sepical_characters of text for create folder
 def remove_sepical_characters(text):
     pattern = r'[^A-Za-z0-9]+'
     return re.sub(pattern, '', text)
@@ -50,7 +51,7 @@ class PublishedManager(models.Manager):
         return super(PublishedManager, self).get_queryset().filter(status='published')
 
 
-class Post(models.Model):
+class Post(models.Model, HitCountMixin):
     objects = jmodels.jManager()
     STATUS = (
         ("draft", 'Draft'),
@@ -71,7 +72,10 @@ class Post(models.Model):
     upadated = jmodels.jDateTimeField(auto_now=True, verbose_name=_("updated"))
     likes = models.ManyToManyField(User, blank=True, verbose_name=_("likes"))
     comments = GenericRelation(Comment, object_id_field="object_pk")
-    views = GenericRelation(HitCount, object_id_field='object_pk',)
+    # hit count for views
+    hit_count_generic = GenericRelation(
+        HitCount, object_id_field='object_pk',
+        related_query_name='hit_count_generic_relation')
     tags = TaggableManager(verbose_name=_("tags"))
     published = PublishedManager()
     enable_comments = models.BooleanField(default=True, verbose_name=_("enable_comments"))
@@ -94,6 +98,9 @@ class Post(models.Model):
         seconds = round(frames / fps)
         video_time = timedelta(seconds=seconds)
         return video_time
+
+    def __str__(self):
+        return self.title
 
     def get_absolute_url(self):
         return f"/blog/post/{self.id}"

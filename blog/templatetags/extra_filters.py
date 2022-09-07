@@ -25,6 +25,14 @@ def time_duration_calculator(time):
         return f"{years} سال پیش   "
 
 
+@register.filter(name='tags_format')
+def tags_format(tags):
+    if type(tags) is not str:
+        tags = [tag.name for tag in tags]
+        return ",".join(tags)
+    return tags
+
+
 @register.filter(name='date_format')
 def date_format(date):
     return date.strftime("%Y %B %d")
