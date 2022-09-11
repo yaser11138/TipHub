@@ -16,6 +16,7 @@ from django_comments_xtd.models import XtdComment
 from django_jalali.db import models as jmodels
 from hitcount.models import HitCount, HitCountMixin
 from taggit.managers import TaggableManager
+from taggit.models import TagBase, GenericTaggedItemBase
 from jdatetime import datetime, timedelta
 from autoslug import AutoSlugField
 now = datetime.now().strftime("%Y/%m/%d")
@@ -25,6 +26,10 @@ User = get_user_model()
 class Category(models.Model):
     name = models.CharField(max_length=30, verbose_name=_("name"))
     slug = models.SlugField(unique=True, null=True, blank=True)
+
+    class Meta:
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
 
     def __str__(self):
         return self.name
@@ -49,6 +54,39 @@ def blog_video_thumbnail_path(instance, filename):
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super(PublishedManager, self).get_queryset().filter(status='published')
+
+
+class MyCustomTag(TagBase):
+    name = models.CharField(
+        verbose_name=_("name"), unique=True, max_length=100
+    )
+    slug = models.SlugField(
+        verbose_name=_("slug"),
+        unique=True,
+        max_length=100,
+        allow_unicode=True,
+    )
+    categories = models.ManyToManyField(verbose_name=_("categories"), to=Category, blank=True, related_name="tags")
+
+    class Meta:
+        verbose_name = _("Tag")
+        verbose_name_plural = _("Tags")
+
+
+class TaggedPost(GenericTaggedItemBase):
+
+    tag = models.ForeignKey(
+        MyCustomTag,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_items",
+    )
+
+    class Meta:
+        verbose_name = _("tagged item")
+        verbose_name_plural = _("tagged items")
+        app_label = "blog"
+        index_together = [["content_type", "object_id"]]
+        unique_together = [["content_type", "object_id", "tag"]]
 
 
 class Post(models.Model, HitCountMixin):
@@ -76,7 +114,7 @@ class Post(models.Model, HitCountMixin):
     hit_count_generic = GenericRelation(
         HitCount, object_id_field='object_pk',
         related_query_name='hit_count_generic_relation')
-    tags = TaggableManager(verbose_name=_("tags"))
+    tags = TaggableManager(verbose_name=_("tags"), through=TaggedPost)
     published = PublishedManager()
     enable_comments = models.BooleanField(default=True, verbose_name=_("enable_comments"))
 
@@ -103,7 +141,7 @@ class Post(models.Model, HitCountMixin):
         return self.title
 
     def get_absolute_url(self):
-        return f"/blog/post/{self.id}"
+        return f"/blog/post/{self.publish.year}/{self.publish.month}/{self.publish.day}/{self.slug}"
 
 
 class PostModerator(CommentModerator):

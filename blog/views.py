@@ -17,17 +17,21 @@ def post_detail(request, year, month, day, slug):
     return render(request, "blog/video-detail.html", context=context)
 
 
-def post_filter_by_category(request, category_slug):
-    category = get_object_or_404(klass=Category, slug=category_slug)
+def posts(request, category_slug=None):
+    posts = Post.published.all()
+    category = None
+    if category_slug:
+        category = get_object_or_404(klass=Category, slug=category_slug)
+        posts = posts.filter(category=category)
     if request.GET.get("tag"):
-        posts = Post.published.filter(category__slug=category_slug, tags__slug__in=[request.GET.get("tag")])
-    else:
-        posts = Post.published.filter(category__slug=category_slug)
+        posts = posts.filter(tags__slug__in=[request.GET.get("tag")])
+    if request.GET.get("sort"):
+        posts = posts.order_by(request.GET.get("sort"))
     context = {
         "posts": posts,
         "category": category,
     }
-    return render(request, "blog/blog_filter_by_category.html", context=context)
+    return render(request, "blog/all-videos.html", context=context)
 
 
 def post_like(request, post_id):
@@ -39,8 +43,7 @@ def post_like(request, post_id):
             post.likes.remove(request.user)
     else:
         messages.add_message(request, messages.ERROR, "برای لایک کردن ابتدا وارد حساب کاربری خود شوید")
-    return redirect(reverse("post-detail", args=[post.publish.year, post.publish.month,
-                                                 post.publish.day, post.slug]))
+    return redirect(post.get_absolute_url())
 
 
 @teacher_login_required
@@ -72,7 +75,7 @@ def perview_post(request, post_id):
 
 @teacher_login_required
 def post_delete(request, post_id):
-    post = get_object_or_404(klass=Post,id=post_id, author=request.user)
+    post = get_object_or_404(klass=Post, id=post_id, author=request.user)
     post.delete()
     return redirect(reverse("teacher-panel"))
 
@@ -92,9 +95,3 @@ def post_edit(request, post_id):
         post_form = PostForm(instance=post)
         return render(request, "blog/edit-post.html", context={"form": post_form})
 
-
-@teacher_login_required
-def post_delete(request, post_id):
-    post = get_object_or_404(klass=Post, id=post_id, author=request.user)
-    post.delete()
-    return redirect(reverse("teacher-panel"))

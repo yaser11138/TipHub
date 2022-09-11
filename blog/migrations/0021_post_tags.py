@@ -7,19 +7,9 @@ import taggit.managers
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("taggit", "0005_auto_20220424_2025"),
         ("blog", "0020_remove_category_parent_category_and_more"),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name="post",
-            name="tags",
-            field=taggit.managers.TaggableManager(
-                help_text="A comma-separated list of tags.",
-                through="taggit.TaggedItem",
-                to="taggit.Tag",
-                verbose_name="برچسب ها",
-            ),
-        ),
+
     ]

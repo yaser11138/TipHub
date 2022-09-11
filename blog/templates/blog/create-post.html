@@ -1,4 +1,8 @@
 {% extends 'index.html' %}
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href={% static 'taggit_labels/css/taggit_labels.css' %}>
+{% endblock %}
 {% block main %}
  <main>
      <section class="py-5">
@@ -46,12 +50,9 @@
                                     <option value="published">انتشار</option>
                                 </select>
                             </div>
-
                             <lable> فعال سازی کامنت ها  </lable>
                             <input type="checkbox" name="enable_comments" id="id_enable_comments" checked>
-                            <div class="user-panel-field">
-                                <input type="text" name="tags" {% if form.tags.value %} value="{{ form.tags.value }}" {% endif %}  placeholder="تگ ها:  {{ form.tags.help_text }}" id="id_tags">
-                            </div>
+                            {{ form.tags }}
                             <div class="d-flex justify-content-center mt-3 ">
                                 <button type="submit" class="btn custom-btn ">ذخیره پست</button>
                             </div>
@@ -63,6 +64,7 @@
      </section>
  </main>
 {% endblock main %}
-{% block static %}
-<script src="https://use.fontawesome.com/96472d4340.js"></script>
+{% block script %}
+    <script src="https://use.fontawesome.com/96472d4340.js"></script>
+    <script src="{% static 'taggit_labels/js/taggit_labels.js' %}" >  </script>
 {% endblock %}

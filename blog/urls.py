@@ -9,5 +9,7 @@ urlpatterns = [
     path("post/preview/<int:post_id>/", views.perview_post, name="post-preview"),
     path("post/edit/<int:post_id>/", views.post_edit, name="post-edit"),
     path("post/delete/<int:post_id>/", views.post_delete, name="post-delete"),
-    path("category/<str:category_slug>/", views.post_filter_by_category, name="post-filter-by-category")
+    path("post/all/", views.posts, name="all-posts"),
+    path("post/category/<slug:category_slug>/", views.posts, name="posts-filter-by-category"),
+
 ]

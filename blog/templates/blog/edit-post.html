@@ -1,4 +1,8 @@
 {% extends 'index.html' %}
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href={% static 'taggit_labels/css/taggit_labels.css' %}>
+{% endblock %}
 {% load extra_filters %}
 {% block main %}
  <main>
@@ -24,19 +28,19 @@
                             {% endif %}
                             <!-- item -->
                             <div class="user-panel-field">
-                            <label class="btn custom-btn"  style="cursor: pointer;" for='id_video'> ویدیو <input  type="file" style="opacity: 0;" name="video"  accept="video/*"  id="id_video" ></label>
+                            <label class="btn custom-btn"  style="cursor: pointer;" for='id_video'> ویدیو <input  type="file" style="opacity: 0; width: 3" name="video"  accept="video/*"  id="id_video" ></label>
                             </div>
                             {% if from.video.errors %}
                                 <p> {{ form.video.errors | striptags}} </p>
                             {% endif %}
                             <!-- item -->
                             <div class="user-panel-field">
-                            <label class="btn custom-btn"  style="cursor: pointer;"   for='id_video_thumbnail'> عکس ویدیو <input type="file" style="opacity: 0;"  name="video_thumbnail"  accept="image/*" id="id_video_thumbnail"></label>
+                            <label class="btn custom-btn"  style="cursor: pointer;"   for='id_video_thumbnail'> عکس ویدیو <input type="file" style="opacity: 0; width: 3"  name="video_thumbnail"  accept="image/*" id="id_video_thumbnail"></label>
                             </div>
                             {% if form.video_thumbnail.errors %}
                                 <p> {{ form.video_thumbnail.errors | striptags}} </p>
                             {% endif %}
-                            <div>
+                            <div class="user-panel-field">
                                 <label> وضعیت پست </label>
                                 <select class="select2-dropdown" name="status" id="id_status" >
                                     <option value="draft"  {% if form.status.value  == "draft" %} selected="" {% endif %} >     ذخیره     </option>
@@ -47,10 +51,7 @@
                                 <label> دسته بندی </label>
                                 {{ form.category }}
                              </div>
-                            <div class="user-panel-field">
-                                <input type="text" name="tags" {% if form.tags.value %} value="{{ form.tags.value|tags_format }}" {% endif %}  placeholder="تگ ها:  {{ form.tags.help_text }}" id="id_tags">
-                            </div>
-
+                            {{ form.tags }}
                             <div>
                                 <label for="id_enable_comments"> فعال سازی کامنت</label>
                                 <input type="checkbox" name="enable_comments" id="id_enable_comments" {% if c.enable_comments.value  %} checked {% endif %}>
@@ -66,6 +67,7 @@
      </section>
  </main>
 {% endblock main %}
-{% block static %}
-<script src="https://use.fontawesome.com/96472d4340.js"></script>
+{% block script %}
+    <script src="https://use.fontawesome.com/96472d4340.js"></script>
+    <script src="{% static 'taggit_labels/js/taggit_labels.js' %}"></script>
 {% endblock %}

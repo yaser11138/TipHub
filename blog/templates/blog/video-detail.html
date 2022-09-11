@@ -73,10 +73,9 @@
                                 <div class="labels">
                                     <h4 class="my-3">برچسب ها</h4>
                                     <ul class="d-flex align-items-center">
-                                        <li><a href="#" title="">#گردشگری</a></li>
-                                        <li><a href="#" title="">#تفریحی </a></li>
-                                        <li><a href="#" title="">#دشت نور</a></li>
-                                        <li><a href="#" title="">#مکان های تفریحی</a></li>
+                                        {% for tag in post.tags.all %}
+                                        <li><a href="{% url 'all-posts' %}?tag={{ tag.slug }}" title="">#{{ tag.name }}</a></li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
@@ -119,7 +118,7 @@
                             </div>
                             <div class="d-flex align-items-center py-3">
                                 <img src="{{post.author.profile_picture.url }}" alt="student" class="teacher-profile">
-                                <a href="{% url 'teacher-info' request.user.id %}" ><p class="user-name pr-2"> {{ post.author.first_name}} {{ post.author.last_name}} </p></a>
+                                <a href="{% url 'teacher-info' post.author.id %}" ><p class="user-name pr-2"> {{ post.author.get_full_name}} </p></a>
                             </div>
                             <p class="color78 teacher-description py-3"> {{ teacher.bio }} </p>
                                 <div class="teacher-social-media d-flex align-items-center justify-content-center flex-wrap">

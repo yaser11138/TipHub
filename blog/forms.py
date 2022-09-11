@@ -1,12 +1,15 @@
 from django import forms
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.utils.text import slugify
-from .models import Post, Category
+from taggit.forms import TagField
+from taggit_labels.widgets import LabelWidget
+from .models import Post, Category, MyCustomTag
 from django.utils.translation import gettext as _
 from jdatetime import date
 
 
 class PostForm(forms.ModelForm):
+    tags = TagField(required=False, widget=LabelWidget(model=MyCustomTag))
 
     class Meta:
         model = Post
@@ -37,8 +40,6 @@ class CategoryForm(forms.ModelForm):
 
     def save(self, commit=True):
         category = super(CategoryForm, self).save(commit=False)
-        if category.slug is None:
-            category.slug = slugify(category.name, allow_unicode=True)
         if commit:
             category.save()
         return category

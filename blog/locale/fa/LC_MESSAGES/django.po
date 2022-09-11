@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-01 12:32+0430\n"
+"POT-Creation-Date: 2022-09-08 11:50+0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,63 +18,99 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\blog\models.py:45
+#: .\blog\models.py:27 .\blog\models.py:61
+msgid "name"
+msgstr "نام"
+
+#: .\blog\models.py:31
+msgid "Category"
+msgstr "دسته بندی"
+
+#: .\blog\models.py:32
+msgid "Categories"
+msgstr "دسته بندی ها"
+
+#: .\blog\models.py:64 .\blog\models.py:100
+msgid "slug"
+msgstr "عنوان انگلیسی"
+
+#: .\blog\models.py:69
+msgid "categories"
+msgstr "دسته بندی"
+
+#: .\blog\models.py:72
+msgid "Tag"
+msgstr "برچسب"
+
+#: .\blog\models.py:73
+msgid "Tags"
+msgstr "برچسب ها"
+
+#: .\blog\models.py:85
+msgid "tagged item"
+msgstr "ایتم برچسب زده"
+
+#: .\blog\models.py:86
+msgid "tagged items"
+msgstr "ایتم های برچسب زده"
+
+#: .\blog\models.py:98
 msgid "author"
 msgstr "نویسنده"
 
-#: .\blog\models.py:46
+#: .\blog\models.py:99
 msgid "title"
 msgstr "موضوع"
 
-#: .\blog\models.py:47
-msgid "slug"
-msgstr ""
-
-#: .\blog\models.py:48
+#: .\blog\models.py:101
 msgid "body"
 msgstr "متن پست"
 
-#: .\blog\models.py:50
+#: .\blog\models.py:104
 msgid "video"
 msgstr "ویدیو"
 
-#: .\blog\models.py:52
+#: .\blog\models.py:106
 msgid "video_thumbnail"
 msgstr "کاور ویدیو"
 
-#: .\blog\models.py:53
+#: .\blog\models.py:107
 msgid "status"
 msgstr "وضعیت"
 
-#: .\blog\models.py:54
+#: .\blog\models.py:108
 msgid "publish"
 msgstr " زمان انتشار"
 
-#: .\blog\models.py:55
+#: .\blog\models.py:109
 msgid "created"
 msgstr "زمان ساخته شدن"
 
-#: .\blog\models.py:56
+#: .\blog\models.py:110
 msgid "updated"
 msgstr "اخرین اپدیت"
 
-#: .\blog\models.py:57
+#: .\blog\models.py:111
 msgid "likes"
 msgstr "لایک ها"
 
-#: .\blog\models.py:60
+#: .\blog\models.py:117
+msgid "tags"
+msgstr "برچسب ها"
+
+#: .\blog\models.py:119
 msgid "enable_comments"
 msgstr "فعال بود کامنت"
 
-#: .\blog\models.py:65
+#: .\blog\models.py:124
 msgid "Post"
 msgstr "پست"
 
-#: .\blog\models.py:66
+#: .\blog\models.py:125
 msgid "Posts"
 msgstr "پست ها"
 
-#: .\blog\models.py:110
+#: .\blog\models.py:171
 #, python-format
 msgid "[%(site)s] New comment posted on \"%(object)s\""
 msgstr ""
