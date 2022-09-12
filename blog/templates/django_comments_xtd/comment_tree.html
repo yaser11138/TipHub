@@ -39,7 +39,7 @@
                 <div><input type="hidden" name="reply_to" value="{{ item.comment.id }}" id="id_reply_to"></div>
                 {{ form.timestamp }}
                 {{ form.security_hash }}
-                <input type="hidden" name="next" value="{% url 'post-detail' item.comment.content_object.id %}" />
+                <input type="hidden" name="next" value="{{ item.comment.content_object.get_absolute_url }}" />
                 <button type="submit" class="btn custom-btn">ارسال نظر</button>
                 </form>
          </div>

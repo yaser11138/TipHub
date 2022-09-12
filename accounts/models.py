@@ -54,6 +54,11 @@ class CustomUser(AbstractUser):
     def is_teacher(self):
         return hasattr(self, "teacher")
 
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+
 
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, verbose_name=_("User"))
@@ -66,3 +71,4 @@ class Teacher(models.Model):
     class Meta:
         verbose_name = _("Teacher")
         verbose_name_plural = _("Teachers")
+

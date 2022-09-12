@@ -54,7 +54,7 @@
                             {{ form.tags }}
                             <div>
                                 <label for="id_enable_comments"> فعال سازی کامنت</label>
-                                <input type="checkbox" name="enable_comments" id="id_enable_comments" {% if c.enable_comments.value  %} checked {% endif %}>
+                                <input type="checkbox" name="enable_comments" id="id_enable_comments" {% if form.enable_comments.value  %} checked {% endif %}>
                             </div>
                             <div class="d-flex justify-content-center mt-3 ">
                                 <button type="submit" class="btn custom-btn ">ذخیره پست</button>

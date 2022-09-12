@@ -1,11 +1,12 @@
 import hitcount.views
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
 from django.urls import reverse
 from django.contrib import messages
-from .models import Post, Category
-from .forms import PostForm
 from accounts.decorators import teacher_login_required
 from jdatetime import date
+from .models import Post, Category
+from .forms import PostForm
 
 
 def post_detail(request, year, month, day, slug):
@@ -20,6 +21,7 @@ def post_detail(request, year, month, day, slug):
 def posts(request, category_slug=None):
     posts = Post.published.all()
     category = None
+
     if category_slug:
         category = get_object_or_404(klass=Category, slug=category_slug)
         posts = posts.filter(category=category)
@@ -27,10 +29,17 @@ def posts(request, category_slug=None):
         posts = posts.filter(tags__slug__in=[request.GET.get("tag")])
     if request.GET.get("sort"):
         posts = posts.order_by(request.GET.get("sort"))
+    page_number = int(request.GET.get("page", 1))
+    paginator = Paginator(posts, 12)
+    pages = paginator.get_elided_page_range(page_number, on_each_side=1)
+    current_page = paginator.get_page(page_number)
     context = {
         "posts": posts,
         "category": category,
+        "pages": pages,
+        "current_page": current_page,
     }
+    print(context)
     return render(request, "blog/all-videos.html", context=context)
 
 

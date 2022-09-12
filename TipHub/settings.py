@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'django_comments_xtd',
     'django_comments',
     'hitcount',
-    'taggit',
+    'taggit_labels',
     # allauth apps
     'allauth',
     'allauth.account',
@@ -196,4 +196,3 @@ DEFAULT_FROM_EMAIL = "noreplay@TipHub.com"
 COMMENTS_XTD_LIST_ORDER = ('-thread_id', 'order')
 
 AUTOSLUG_SLUGIFY_FUNCTION = lambda slug: slugify(slug, allow_unicode=True)
-
