@@ -7,18 +7,10 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("blog", "0019_alter_category_unique_together_alter_category_slug"),
+        ("blog", "0015_category_post_categories"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="category",
-            name="parent_category",
-        ),
-        migrations.RemoveField(
-            model_name="post",
-            name="categories",
-        ),
         migrations.AddField(
             model_name="post",
             name="categories",

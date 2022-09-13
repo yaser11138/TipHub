@@ -24,31 +24,8 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("name", models.CharField(max_length=10, verbose_name="نام")),
-                (
-                    "slug",
-                    autoslug.fields.AutoSlugField(
-                        editable=False,
-                        populate_from="name",
-                        unique_with=("parent_category",),
-                    ),
-                ),
-                (
-                    "parent_category",
-                    models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
-                        related_name="sub_categories",
-                        to="blog.category",
-                        verbose_name="parent categories",
-                    ),
-                ),
+                ("name", models.CharField(max_length=30, verbose_name="نام")),
+                ("slug", models.SlugField(blank=True, null=True, unique=True)),
             ],
-        ),
-        migrations.AddField(
-            model_name="post",
-            name="categories",
-            field=models.ManyToManyField(related_name="posts", to="blog.category"),
         ),
     ]

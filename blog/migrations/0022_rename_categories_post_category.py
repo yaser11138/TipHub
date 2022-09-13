@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("blog", "0021_post_tags"),
+        ("blog", "0020_remove_category_parent_category_and_more"),
     ]
 
     operations = [

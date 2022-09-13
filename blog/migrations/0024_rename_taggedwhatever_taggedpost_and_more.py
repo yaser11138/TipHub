@@ -11,10 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameModel(
-            old_name="TaggedWhatever",
-            new_name="TaggedPost",
-        ),
         migrations.AlterModelOptions(
             name="taggedpost",
             options={

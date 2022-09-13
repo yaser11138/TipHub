@@ -11,5 +11,5 @@ urlpatterns = [
     path("post/delete/<int:post_id>/", views.post_delete, name="post-delete"),
     path("post/all/", views.posts, name="all-posts"),
     path("post/category/<slug:category_slug>/", views.posts, name="posts-filter-by-category"),
-
+    path("post/search/", views.search, name="post-search"),
 ]

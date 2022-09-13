@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="TaggedWhatever",
+            name="TaggedPost",
             fields=[
                 (
                     "id",
@@ -86,12 +86,12 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
         ),
-        migrations.AlterField(
+        migrations.AddField(
             model_name="post",
             name="tags",
             field=taggit.managers.TaggableManager(
                 help_text="A comma-separated list of tags.",
-                through="blog.TaggedWhatever",
+                through="blog.TaggedPost",
                 to="blog.MyCustomTag",
                 verbose_name="برچسب ها",
             ),

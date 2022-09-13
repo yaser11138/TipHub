@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.urls import reverse
 from django.contrib import messages
 from accounts.decorators import teacher_login_required
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from jdatetime import date
 from .models import Post, Category
 from .forms import PostForm
@@ -39,7 +40,6 @@ def posts(request, category_slug=None):
         "pages": pages,
         "current_page": current_page,
     }
-    print(context)
     return render(request, "blog/all-videos.html", context=context)
 
 
@@ -53,6 +53,25 @@ def post_like(request, post_id):
     else:
         messages.add_message(request, messages.ERROR, "برای لایک کردن ابتدا وارد حساب کاربری خود شوید")
     return redirect(post.get_absolute_url())
+
+
+def search(request):
+    q = request.GET.get("q", None)
+    if q:
+        vector = SearchVector('title', weight='A') + SearchVector("tags__name", weight='B') +\
+                 SearchVector("body", weight='C')
+        query = SearchQuery(q)
+        posts = Post.objects.annotate(rank=SearchRank(vector, query, cover_density=True)).order_by("-rank")
+    page_number = int(request.GET.get("page", 1))
+    paginator = Paginator(posts, 12)
+    pages = paginator.get_elided_page_range(page_number, on_each_side=1)
+    current_page = paginator.get_page(page_number)
+    context = {
+        "posts": posts,
+        "pages": pages,
+        "current_page": current_page,
+    }
+    return render(request, "blog/all-videos.html", context=context)
 
 
 @teacher_login_required

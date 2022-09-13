@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("blog", "0010_remove_post_noww"),
+        ("blog", "0008_alter_post_options_post_enable_comments_post_likes_and_more"),
     ]
 
     operations = [

@@ -10,39 +10,6 @@
     <main>
         <section class="py-5">
             <div class="container">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    {% if category %}
-                    <h2 class="title-section">ویدیوهای  {{ category.name }}</h2>
-                    {% else %}
-                    <h2 class="title-section">همه ویدیوها</h2>
-                    {% endif %}
-                </div>
-                <div class="d-flex flex-md-row justify-content-center align-items-center" style="gap: 5px">
-                    <button onclick="ShowFilter();" > فیلتر <i class="fa fa-filter" ></i> </button>
-                    <!-- if the category is set it shows the category related tags else it shows categories -->
-                    {% if category %}
-                        {% for tag in category.tags.all %}
-                        <a href="{% url 'posts-filter-by-category' category.slug %}?tag={{ tag.slug }}" ><button type="submit"  class="btn btn-info">{{ tag.name }}</button></a>
-                        {% endfor %}
-                    {% else %}
-                        {% for category in categories %}
-                        <a href="{% url 'posts-filter-by-category' category.slug %}" ><button type="submit"  class="btn btn-info">{{ category.name }}</button></a>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                <div class="d-flex flex-md-row">
-                    <form  id="filter" style="display: none">
-                        <p>  نوع فیلتر را انتخاب کنید</p>
-                        <input type="radio" id="age1" name="sort" value="-publish">
-                        <label for="age1">جدیدترین</label><br>
-                        <input type="radio" id="age2" name="sort" value="hit_count_generic__hits">
-                        <label for="age2"> کمترین بازدید </label><br>
-                        <input type="radio" id="age3" name="sort" value="-hit_count_generic__hits">
-                        <label for="age3">بیشترین بازدید</label><br><br>
-                        <input type="submit" value="اعمال فیلتر">
-                    </form>
-
-                </div>
                 <div class="row">
                     {% for post in current_page.object_list %}
                     <div class="col-md-6 col-lg-4 my-2">
@@ -96,12 +63,11 @@
                 <div class="d-flex align-items-center justify-content-center mb-3 pagination">
                     <a href="" class="mx-1"><i class="fa fa-chevron-right"></i></a>
                     {% for page in pages %}
-                        {% if request.GET.tag %}
-                            <a href="?tag={{ request.GET.tag }}&page={{ page}}" class="active mx-1"> {{ page }} </a>
+                        {% if request.GET.search %}
+                            <a href="?tag={{ request.GET.search }}&page={{ page}}" class="active mx-1"> {{ page }} </a>
                         {% else %}
                             <a href="?page={{ page}}" class="active mx-1"> {{ page }} </a>
                         {% endif %}
-
                     {% endfor %}
                     <a href="" class="mx-1"><i class="fa fa-chevron-left"></i></a>
                 </div>
