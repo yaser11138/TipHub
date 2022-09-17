@@ -59,7 +59,6 @@ class CustomUser(AbstractUser):
         return f"{self.first_name} {self.last_name}"
 
 
-
 class Teacher(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, verbose_name=_("User"))
     bio = models.TextField(verbose_name=_("Bio"))

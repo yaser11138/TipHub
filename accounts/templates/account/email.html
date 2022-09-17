@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+{% block main %}
+    <main>
+        <section class="py-5">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-sm-9 col-md-7 col-lg-5">
+                        <div class="custom-bg p-2">
+                            <label>ایمیل فعلی: </label>
+                            {{ request.user.email }}
+                            <form method="post" action="{% url 'account_email' %}" class="add_email">
+                                {% csrf_token %}
+                                <div class="field">
+                                    <i class="fa fa-lock"></i>
+                                    <input class="input" type="email" name="email" placeholder="نشانی رایانامه" required="" id="id_email">
+                                    </div>
+                                    {% if form.errors %}
+                                        {% for error in form.errors.values %}
+                                            <p>{{ error }}</p>
+                                        {% endfor %}
+                                    {% endif %}
+                                <div class="my-3">
+                                    <button name="action_add" class="btn custom-btn w-100">تغییر ایمیل</button>
+                                </div>
+                            </form>
+                        {% if messages %}
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock  %}
+{% block static %}
+    <script src="https://use.fontawesome.com/96472d4340.js"></script>
+{% endblock %}

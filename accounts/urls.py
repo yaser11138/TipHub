@@ -11,6 +11,7 @@ urlpatterns = [
     path("teacher/info/<int:user_id>/", views.teacher_info, name="teacher-info"),
     path("teacher/panel/", views.teacher_panel, name="teacher-panel"),
     path("teacher/panel/edit/", views.edit_teacher_panel, name="edit-teacher-panel"),
+    path("confirm-email/<key>/", views.EmailConfirmationView.as_view(), name="account_confirm_email",),
     path("user-panel/", views.user_panel, name="user-panel"),
     path("forgot-password/", 
          auth_views.PasswordResetView.as_view(template_name="forgot-password.html"),

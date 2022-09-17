@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetConfirmView
 from allauth.account.views import LoginView, SignupView
 from django.urls import reverse_lazy
+from allauth.account.views import ConfirmEmailView
+from allauth.account.models import EmailAddress
+from allauth.account import app_settings
 from .forms import CustomUserUpdateForm, TeacherUpdateFrom
 from .decorators import teacher_login_required
 from .models import Teacher
@@ -39,12 +42,12 @@ def edit_user_panel(request):
         form = CustomUserUpdateForm(data=request.POST, files=request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            return render(request, "account/edit-user-panel.html", context={"form": form})
+            return render(request, "account/edit-teacher-info.html", context={"form": form})
         else:
-            return render(request, "account/edit-user-panel.html", context={"form": form})
+            return render(request, "account/edit-teacher-info.html", context={"form": form})
     else:
         form = CustomUserUpdateForm(instance=request.user)
-        return render(request, "account/edit-user-panel.html", context={"form": form})
+        return render(request, "account/edit-teacher-info.html", context={"form": form})
 
 
 @login_required(login_url=reverse_lazy("login"))   
@@ -78,9 +81,45 @@ def edit_teacher_panel(request):
         if all([user_form.is_valid(), teacher_form.is_valid()]):
             user_form.save()
             teacher_form.save()
-            return render(request, "account\edit-user-panel.html", context=context)
+            return render(request, "account\edit-teacher-info.html", context=context)
         else:
-            return render(request, "account\edit-user-panel.html", context={"user_form": user_form,
+            return render(request, "account\edit-teacher-info.html", context={"user_form": user_form,
                                                                             "teacher_form": teacher_form})
     else:
-        return render(request, "account\edit-user-panel.html", context=context)
+        return render(request, "account\edit-teacher-info.html", context=context)
+
+
+class EmailConfirmationView(ConfirmEmailView):
+    def post(self, *args, **kwargs):
+        self.object = confirmation = self.get_object()
+        email_adress = confirmation.email_address
+        print(email_adress)
+        print(len(EmailAddress.objects.filter(user=email_adress.user)), EmailAddress.objects.filter(user=email_adress.user))
+        if len(EmailAddress.objects.filter(user=email_adress.user)) >= 2:
+            EmailAddress.objects.filter(user=email_adress.user)[0].delete()
+        confirmation.confirm(self.request)
+
+        # In the event someone clicks on an email confirmation link
+        # for one account while logged into another account,
+        # logout of the currently logged in account.
+        if (
+            self.request.user.is_authenticated
+            and self.request.user.pk != confirmation.email_address.user_id
+        ):
+            self.logout()
+
+        if app_settings.LOGIN_ON_EMAIL_CONFIRMATION:
+            resp = self.login_on_confirm(confirmation)
+            if resp is not None:
+                return resp
+        # Don't -- allauth doesn't touch is_active so that sys admin can
+        # use it to block users et al
+        #
+        # user = confirmation.email_address.user
+        # user.is_active = True
+        # user.save()
+        redirect_url = self.get_redirect_url()
+        if not redirect_url:
+            ctx = self.get_context_data()
+            return self.render_to_response(ctx)
+        return redirect(redirect_url)
