@@ -62,16 +62,18 @@ def search(request):
                  SearchVector("body", weight='C')
         query = SearchQuery(q)
         posts = Post.objects.annotate(rank=SearchRank(vector, query, cover_density=True)).order_by("-rank")
-    page_number = int(request.GET.get("page", 1))
-    paginator = Paginator(posts, 12)
-    pages = paginator.get_elided_page_range(page_number, on_each_side=1)
-    current_page = paginator.get_page(page_number)
-    context = {
-        "posts": posts,
-        "pages": pages,
-        "current_page": current_page,
-    }
-    return render(request, "blog/all-videos.html", context=context)
+        page_number = int(request.GET.get("page", 1))
+        paginator = Paginator(posts, 12)
+        pages = paginator.get_elided_page_range(page_number, on_each_side=1)
+        current_page = paginator.get_page(page_number)
+        context = {
+            "posts": posts,
+            "pages": pages,
+            "current_page": current_page,
+        }
+        return render(request, "blog/search-videos.html", context=context)
+    else:
+        return redirect(reverse("all-posts"))
 
 
 @teacher_login_required

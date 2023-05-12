@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 from django.urls import path, include
 from index.views import homepage
@@ -11,6 +12,7 @@ urlpatterns = [
     path("blog/", include("blog.urls")),
     path("accounts/", include("accounts.urls")),
     path("comments/", include('django_comments_xtd.urls')),
+    path("notifications/", include('notification.urls')),
     path('hitcount/', include('hitcount.urls', namespace='hitcount')),
     path('accounts/', include('allauth.urls')),
 ]

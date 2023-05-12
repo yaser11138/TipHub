@@ -11,17 +11,17 @@
           <div class="col-sm-9 col-md-11 col-lg-10">
             <form method="post" enctype="multipart/form-data">
               {% csrf_token %}
-            <div class="user-panel custom-bg">
-              <div class="user-panel-box">
-                  <div class="user-panel-profile">
+                <div class="user-panel custom-bg">
+                    <div class="user-panel-box">
+                        <div class="user-panel-profile">
                       <img src="{{ user_form.profile_picture.value.url }}" alt="">
-                  </div>
+                    </div>
                   <div class="change-profile-btn">
                         <label class="btn custom-btn"  style="cursor: pointer;" for='id_profile_picture'>تغییر عکس پروفایل <input class="btn custom-btn" type="file" style="opacity:0;width:3;" name="profile_picture" accept="image/*" id="id_profile_picture"></label>
                       {% if user_form.profile_picture.errors %}
                       <p>{{ user_form.profile_picture.errors|striptags}}</p>
-                      {% endif %} 
-                  </div> 
+                      {% endif %}
+                  </div>
                   <!-- item -->
                   <div class="form-field">
                       <div class="user-panel-field">
@@ -74,53 +74,6 @@
                       {% endif %}
                   </div>
               </div>
-             <div class="">
-                    <label for="id_body"> درباره من </label>
-                    <textarea class="w-100 p-2 comment-area" name="bio" id="id_body" cols="30" rows="10">{{ teacher_form.bio.value }}</textarea>
-                    {% if teacher_form.bio.errors %}
-                      <p>{{ teacher_form.bio.errors|striptags}}</p>
-                      {% endif %}
-             </div>
-            <div class="user-panel-box">
-            <div class="form-field"  >
-                <div class="user-panel-field">
-                      <i class="fa fa-telegram fa-1" aria-hidden="true"></i>
-                      <input class="email-input left" type="text" name="telegram" value="{{ teacher_form.telegram.value }}" placeholder="تلگرام">
-                </div>
-                {% if teacher_form.telegram.errors %}
-                    <p>{{ teacher_form.telegram.errors|striptags}}</p>
-                {% endif %}
-            </div>
-            <div class="form-field"  >
-                  <div class="user-panel-field">
-                      <i class="fa fa-github"></i>
-                      <input class="email-input left" type="text" name="github" value="{{ teacher_form.github.value }}" placeholder="گیت هاب">
-                  </div>
-                  {% if teacher_form.github.errors %}
-                    <p>{{ teacher_form.github.errors|striptags}}</p>
-                {% endif %}
-            </div>
-            <div class="form-field"  >
-                  <div class="user-panel-field">
-                      <i class="fa fa-linkedin"></i>
-                      <input class="email-input left" type="text" name="linkedin" value="{{ teacher_form.linkedin.value }}" placeholder="لینکدین">
-                  </div>
-                  {% if teacher_form.linkedin.errors %}
-                      <p>{{ teacher_form.linkedin.errors|striptags}}</p>
-                  {% endif %}
-            </div>
-            <div class="form-field"  >
-                  <div class="user-panel-field">
-                      <i class="fa fa-instagram"></i>
-                      <input class="email-input left" type="text" name="instagram" value="{{ teacher_form.instagram.value }}" placeholder="اینستاگرام">
-                  </div>
-                  {% if teacher_form.instagram.errors %}
-                      <p>{{ teacher_form.instagram.errors|striptags}}</p>
-                  {% endif %}
-            </div>
-            </div>
-                <h1>{{ error1 }}</h1>
-                <h1>{{ error2 }}</h1>
               <div class="d-flex justify-content-center mt-3 ">
                   <button type="submit" class="btn custom-btn w-50">اعمال تغییرات</button>
               </div>

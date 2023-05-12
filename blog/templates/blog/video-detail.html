@@ -57,11 +57,11 @@
                                         <form id="like"  method="post" action="{% url 'post-like' post.id %}">
                                             {% csrf_token %}
                                         </form>
-                                        {% else %}
+                                    {% else %}
                                             {% for message in messages %}
                                                 <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
                                             {% endfor %}
-                                        {% endif %}
+                                    {% endif %}
                                     </div>
                                 </div>
                             </div>

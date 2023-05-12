@@ -39,15 +39,15 @@ def logout(request):
 @login_required(login_url=reverse_lazy("login"))      
 def edit_user_panel(request):
     if request.method == "POST":
-        form = CustomUserUpdateForm(data=request.POST, files=request.FILES, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return render(request, "account/edit-teacher-info.html", context={"form": form})
+        user_form = CustomUserUpdateForm(data=request.POST, files=request.FILES, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            return render(request, "account/edit-user-panel.html", context={"user_form": user_form})
         else:
-            return render(request, "account/edit-teacher-info.html", context={"form": form})
+            return render(request, "account/edit-user-panel.html", context={"user_form": user_form})
     else:
-        form = CustomUserUpdateForm(instance=request.user)
-        return render(request, "account/edit-teacher-info.html", context={"form": form})
+        user_form = CustomUserUpdateForm(instance=request.user)
+        return render(request, "account/edit-user-panel.html", context={"user_form": user_form})
 
 
 @login_required(login_url=reverse_lazy("login"))   
@@ -93,8 +93,6 @@ class EmailConfirmationView(ConfirmEmailView):
     def post(self, *args, **kwargs):
         self.object = confirmation = self.get_object()
         email_adress = confirmation.email_address
-        print(email_adress)
-        print(len(EmailAddress.objects.filter(user=email_adress.user)), EmailAddress.objects.filter(user=email_adress.user))
         if len(EmailAddress.objects.filter(user=email_adress.user)) >= 2:
             EmailAddress.objects.filter(user=email_adress.user)[0].delete()
         confirmation.confirm(self.request)

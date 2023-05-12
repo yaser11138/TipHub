@@ -34,26 +34,33 @@
                         <a href="{% url 'homepage' %}"><img src="{% static 'assets/image/logo.png' %}" class="logo-img img-fluid" alt="" /></a>
                     </div>
                     <div class="nav-search-btn">
-                        <input type="search" placeholder="جستجو">
-                        <i class="fa fa-search"></i>
+                        <form action="{% url 'post-search' %}">
+                            <input type="search" name="q" placeholder="جستجو">
+                            <button type="submit" ><i class="fa fa-search"></i></button>
+                        </form>
                     </div>
 
                 </div>
                 <div class="d-block d-md-flex align-items-center pl-md-4">
+                    {% if request.user.is_authenticated %}
                     <div class="dropdown notification-box">
                         <div class="position-relative d-none d-md-block " type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img src="{% static 'assets/image/notification.png' %}" class="notification-img" alt="">
-                            <div class="badge">2</div>
+                            {% if notifications %}
+                                <div class="badge">{{ notifications|length }}</div>
+                             {% endif %}
                         </div>
                         <div class="dropdown-menu notification-menu-items custom-bg"
                             aria-labelledby="dropdownMenuButton">
-                            <a class="border-bottom" href="#"> ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ </a>
-                            <a class="border-bottom" href="#"> ایپسوم متن ساختگی با تولید </a>
-                            <a class="border-bottom" href="#"> ایپسوم متن ساختگی با تولید سادگی</a>
-
+                                {% for notification in notifications %}
+                                    <a class="border-bottom" href="{% url 'notification' notification.id %}"> {{ notification.text }} </a>
+                                {% empty %}
+                                    <p>در حال حاضر اطلاعیه ای برای نمایش وجود ندارد</p>
+                                {% endfor %}
                         </div>
                     </div>
+                    {% endif %}
                     {% if request.user.is_authenticated %}
                     <div class="header-login d-none d-md-block">
                         <div class="notification-box dropdown">
@@ -116,8 +123,13 @@
                     <div class="dropdown notification-box">
                         <div class="position-relative d-block d-md-none " type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src={% static 'assets/image/notification.png' %} class="notification-img" alt="">
-                            <div class="badge">2</div>
+                            {% if request.user.is_authenticated %}
+                                <img src={% static 'assets/image/notification.png' %} class="notification-img" alt="">
+                                <div class="badge">{{ notifications| length }}</div>
+                                    {% for notification in notifications %}
+                                        <a class="border-bottom" href="{% url 'notification' notification.id %}"> {{ notification.text }} </a>
+                                    {% endfor %}
+                            {% endif %}
                         </div>
                         <div class="dropdown-menu notification-menu-items custom-bg"
                             aria-labelledby="dropdownMenuButton">

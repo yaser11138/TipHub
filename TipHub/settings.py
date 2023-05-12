@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.postgres',
     'django_jalali',
     'django.contrib.sites',
     'accounts.apps.AccountsConfig',
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'django_comments_xtd',
     'django_comments',
     'hitcount',
+    'notification.apps.NotificationConfig',
     'taggit_labels',
     # allauth apps
     'allauth',
@@ -83,7 +85,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'blog.category_context_processor.category_processor'
+                'blog.category_context_processor.category_processor',
+                'notification.notification_context_procsser.notifications'
             ],
         },
     },
@@ -95,9 +98,13 @@ WSGI_APPLICATION = "TipHub.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tiphub',
+        'USER': 'postgres',
+        'PASSWORD': 'asd@32487',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -172,7 +179,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-SITE_ID = 2
+SITE_ID = 3
 login_url = reverse_lazy("login")
 LOGIN_REDIRECT_URL = reverse_lazy("homepage")
 AUTHENTICATION_BACKENDS = [
