@@ -14,11 +14,11 @@ from django_comments.moderation import CommentModerator, get_current_site, send_
 from django_comments_xtd import views
 from django_comments_xtd.models import XtdComment
 from django_jalali.db import models as jmodels
-from hitcount.models import HitCount, HitCountMixin
+from hitcount.models import HitCount, HitCountMixin as hit_mixin
 from taggit.managers import TaggableManager
 from taggit.models import TagBase, GenericTaggedItemBase
 from jdatetime import datetime, timedelta
-from autoslug import AutoSlugField
+
 now = datetime.now().strftime("%Y/%m/%d")
 User = get_user_model()
 
@@ -37,8 +37,8 @@ class Category(models.Model):
 
 # remove_sepical_characters of text for create folder
 def remove_sepical_characters(text):
-    pattern = r'[^A-Za-z0-9]+'
-    return re.sub(pattern, '', text)
+    pattern = r"[^A-Za-z0-9]+"
+    return re.sub(pattern, "", text)
 
 
 def blog_video_path(instance, filename):
@@ -53,20 +53,20 @@ def blog_video_thumbnail_path(instance, filename):
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
-        return super(PublishedManager, self).get_queryset().filter(status='published')
+        return super(PublishedManager, self).get_queryset().filter(status="published")
 
 
 class MyCustomTag(TagBase):
-    name = models.CharField(
-        verbose_name=_("name"), unique=True, max_length=100
-    )
+    name = models.CharField(verbose_name=_("name"), unique=True, max_length=100)
     slug = models.SlugField(
         verbose_name=_("slug"),
         unique=True,
         max_length=100,
         allow_unicode=True,
     )
-    categories = models.ManyToManyField(verbose_name=_("categories"), to=Category, blank=True, related_name="tags")
+    categories = models.ManyToManyField(
+        verbose_name=_("categories"), to=Category, blank=True, related_name="tags"
+    )
 
     class Meta:
         verbose_name = _("Tag")
@@ -89,22 +89,34 @@ class TaggedPost(GenericTaggedItemBase):
         unique_together = [["content_type", "object_id", "tag"]]
 
 
-class Post(models.Model, HitCountMixin):
+class Post(models.Model, hit_mixin):
     objects = jmodels.jManager()
-    STATUS = (
-        ("draft", 'Draft'),
-        ("published", 'Published')
+    STATUS = (("draft", "Draft"), ("published", "Published"))
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="blog_posts",
+        verbose_name=_("author"),
     )
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_posts", verbose_name=_("author"))
     title = models.CharField(max_length=250, verbose_name=_("title"))
     slug = models.SlugField(max_length=250, allow_unicode=True, verbose_name=_("slug"))
     body = models.TextField(verbose_name=_("body"))
-    category = models.ForeignKey(Category, related_name="posts",on_delete=models.SET_NULL, null=True)
-    video = models.FileField(upload_to=blog_video_path, validators=[FileExtensionValidator(['mp4'])],
-                             verbose_name=_("video"))
-    video_thumbnail = models.ImageField(upload_to=blog_video_thumbnail_path,
-                                        validators=[validate_image_file_extension], verbose_name=_("video_thumbnail"))
-    status = models.CharField(max_length=10, choices=STATUS, default='draft', verbose_name=_('status'))
+    category = models.ForeignKey(
+        Category, related_name="posts", on_delete=models.SET_NULL, null=True
+    )
+    video = models.FileField(
+        upload_to=blog_video_path,
+        validators=[FileExtensionValidator(["mp4"])],
+        verbose_name=_("video"),
+    )
+    video_thumbnail = models.ImageField(
+        upload_to=blog_video_thumbnail_path,
+        validators=[validate_image_file_extension],
+        verbose_name=_("video_thumbnail"),
+    )
+    status = models.CharField(
+        max_length=10, choices=STATUS, default="draft", verbose_name=_("status")
+    )
     publish = jmodels.jDateField(null=True, blank=True, verbose_name=_("publish"))
     created = jmodels.jDateTimeField(auto_now_add=True, verbose_name=_("created"))
     upadated = jmodels.jDateTimeField(auto_now=True, verbose_name=_("updated"))
@@ -112,15 +124,19 @@ class Post(models.Model, HitCountMixin):
     comments = GenericRelation(Comment, object_id_field="object_pk")
     # hit count for views
     hit_count_generic = GenericRelation(
-        HitCount, object_id_field='object_pk',
-        related_query_name='hit_count_generic_relation')
+        HitCount,
+        object_id_field="object_pk",
+        related_query_name="hit_count_generic_relation",
+    )
     tags = TaggableManager(verbose_name=_("tags"), through=TaggedPost)
     published = PublishedManager()
-    enable_comments = models.BooleanField(default=True, verbose_name=_("enable_comments"))
+    enable_comments = models.BooleanField(
+        default=True, verbose_name=_("enable_comments")
+    )
 
     class Meta:
         unique_together = ["slug", "publish"]
-        ordering = ('-publish',)
+        ordering = ("-publish",)
         verbose_name = _("Post")
         verbose_name_plural = _("Posts")
 
@@ -146,7 +162,7 @@ class Post(models.Model, HitCountMixin):
 
 class PostModerator(CommentModerator):
     email_notification = True
-    enable_field = 'enable_comments'
+    enable_field = "enable_comments"
 
     def email(self, comment, content_object, request):
         """
@@ -163,14 +179,14 @@ class PostModerator(CommentModerator):
             author_email = XtdComment.objects.get(id=comment.parent_id).email
             recipient_list = [author_email]
 
-        t = loader.get_template('comments/comment_notification_email.txt')
+        t = loader.get_template("comments/comment_notification_email.txt")
         c = {
-            'comment': comment,
-            'content_object': content_object,
+            "comment": comment,
+            "content_object": content_object,
         }
         subject = _('[%(site)s] New comment posted on "%(object)s"') % {
-            'site': get_current_site(request).name,
-            'object': content_object,
+            "site": get_current_site(request).name,
+            "object": content_object,
         }
         message = t.render(c)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipient_list)

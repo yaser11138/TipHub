@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -42,24 +42,24 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'django.contrib.postgres',
-    'django_jalali',
-    'django.contrib.sites',
-    'accounts.apps.AccountsConfig',
-    'phonenumber_field',
-    'index',
-    'blog',
-    'django_comments_xtd',
-    'django_comments',
-    'hitcount',
-    'notification.apps.NotificationConfig',
-    'taggit_labels',
+    "django.contrib.postgres",
+    "django_jalali",
+    "django.contrib.sites",
+    "accounts.apps.AccountsConfig",
+    "phonenumber_field",
+    "index",
+    "blog",
+    "django_comments_xtd",
+    "django_comments",
+    "hitcount",
+    "notification.apps.NotificationConfig",
+    "taggit_labels",
     # allauth apps
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.github',
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.github",
 ]
 
 MIDDLEWARE = [
@@ -77,7 +77,7 @@ ROOT_URLCONF = "TipHub.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -85,8 +85,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'blog.category_context_processor.category_processor',
-                'notification.notification_context_procsser.notifications'
+                "blog.category_context_processor.category_processor",
+                "notification.notification_context_procsser.notifications",
             ],
         },
     },
@@ -98,13 +98,13 @@ WSGI_APPLICATION = "TipHub.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tiphub',
-        'USER': 'postgres',
-        'PASSWORD': 'asd@32487',
-        'HOST': 'localhost',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "tiphub",
+        "USER": "postgres",
+        "PASSWORD": "qwe@32487",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
@@ -131,8 +131,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 
-LANGUAGE_CODE = 'fa'
-locale.setlocale(locale.LC_ALL, 'Persian_Iran')
+LANGUAGE_CODE = "fa"
+locale.setlocale(locale.LC_ALL, "Persian_Iran")
 
 TIME_ZONE = "Asia/Tehran"
 
@@ -154,42 +154,41 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
+        "AUTH_PARAMS": {
+            "access_type": "online",
         },
     },
-    'github': {
-    }
+    "github": {},
 }
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 SOCIALACCOUNT_LOGIN_ON_GET = True
 ACCOUNT_LOGOUT_ON_GET = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 SITE_ID = 3
 login_url = reverse_lazy("login")
 LOGIN_REDIRECT_URL = reverse_lazy("homepage")
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 # media
-MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
 
 # phone number
 PHONENUMBER_DB_FORMAT = "NATIONAL"
@@ -200,6 +199,6 @@ PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
 COMMENTS_APP = "django_comments_xtd"
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 DEFAULT_FROM_EMAIL = "noreplay@TipHub.com"
-COMMENTS_XTD_LIST_ORDER = ('-thread_id', 'order')
+COMMENTS_XTD_LIST_ORDER = ("-thread_id", "order")
 
 AUTOSLUG_SLUGIFY_FUNCTION = lambda slug: slugify(slug, allow_unicode=True)
